@@ -1,0 +1,152 @@
+
+/* INPUT - CINETIKA */
+
+.cinetika-input {
+  width: 100%;
+  min-width: 0;
+  font-family: var(--font-primary);
+}
+
+.cinetika-input__label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--color-text-primary);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.cinetika-input__field {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+  min-height: 38px;
+
+  background-color: var(--color-surface);
+  border: 1px solid #78849A;
+
+  transition: border-color 150ms ease;
+}
+
+.cinetika-input__field:focus-within {
+  border-color: var(--color-secondary);
+}
+
+/* Líneas decorativas */
+
+.cinetika-input__decoration {
+  position: absolute;
+  top: -1px;
+  left: -1px;
+
+  display: flex;
+  height: 3px;
+  pointer-events: none;
+}
+
+.cinetika-input__red {
+  width: 40px;
+  background-color: var(--color-primary);
+}
+
+.cinetika-input__blue {
+  width: 40px;
+  background-color: var(--color-secondary);
+}
+
+/* Campo */
+
+.cinetika-input__control {
+  width: 100%;
+  min-width: 0;
+  min-height: 36px;
+
+  padding: 8px 12px;
+
+  background: transparent;
+  border: none;
+  border-radius: 0;
+
+  color: var(--color-text-primary);
+  font-family: inherit;
+  font-size: 12px;
+
+  outline: none;
+}
+
+.cinetika-input__control::placeholder {
+  color: var(--color-text-secondary);
+  opacity: 1;
+}
+
+/* Ocultar X nativa del navegador */
+
+.cinetika-input__control[type="search"]::-webkit-search-cancel-button,
+.cinetika-input__control[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* Botones internos */
+
+.cinetika-input__action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+
+  margin-right: 3px;
+  padding: 6px;
+
+  border: none;
+  border-radius: 0;
+
+  background: transparent;
+  color: var(--color-accent);
+
+  cursor: pointer;
+}
+
+.cinetika-input__action:hover {
+  opacity: 0.75;
+}
+
+.cinetika-input__action svg {
+  width: 17px;
+  height: 17px;
+}
+
+.cinetika-input__action:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: -2px;
+}
+
+.cinetika-input__field:has(
+  .cinetika-input__control:disabled
+) {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.cinetika-input__control:disabled {
+  cursor: not-allowed;
+}
+
+/* ====================================
+   AUTOCOMPLETADO DEL NAVEGADOR
+==================================== */
+
+.cinetika-input__control:-webkit-autofill,
+.cinetika-input__control:-webkit-autofill:hover,
+.cinetika-input__control:-webkit-autofill:focus,
+.cinetika-input__control:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px var(--color-surface) inset;
+  -webkit-text-fill-color: var(--color-text-primary);
+  caret-color: var(--color-text-primary);
+
+  transition: background-color 9999s ease-out 0s;
+}
