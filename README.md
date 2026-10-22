@@ -1,58 +1,16 @@
-# 🎬 Cinetika — Explorador de Películas y Series
+# React + Vite
 
-> Plataforma para explorar contenido audiovisual con una estética **retro ochentera**, inspirada en el **arte pop** y la **Bauhaus**.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
----
+Currently, two official plugins are available:
 
-## 1. Descripción General y Objetivo del MVP
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-**Nombre del proyecto:** Cinetika — Explorador de Películas y Series
+## React Compiler
 
-**Objetivo del MVP:**  
-Crear una plataforma funcional donde los usuarios puedan **registrarse**, **explorar un catálogo** de contenido audiovisual (películas, series y cortometrajes), **buscar títulos** y **consultar sus detalles**, bajo una temática visual retro inspirada en los años 80 y el arte pop / Bauhaus.
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
----
+## Expanding the ESLint configuration
 
-## 2. Alcance Funcional del MVP
-
-### 🔐 Registro e inicio de sesión
-- Crear cuenta e iniciar sesión.
-- Cerrar sesión.
-- Diferenciar roles de usuario.
-
-### 🎞️ Catálogo de películas y series
-- Mostrar películas, series y cortometrajes.
-- Mostrar póster, nombre, año y categoría (tipo de contenido).
-- Organizar el contenido por géneros.
-- Temática visual retro, inspirada en los años 80 y el arte pop / Bauhaus.
-
-### 🔎 Búsqueda y filtros
-- Buscar por nombre.
-- Filtrar por género y tipo de contenido.
-- Explorar títulos.
-
-### 📄 Detalles del contenido
-- Mostrar sinopsis, año, género, duración y calificación.
-
-### 👤 Perfil de usuario
-- Mostrar nombre, correo y foto de perfil.
-- Permitir editar la información básica.
-- Utilizar una foto predeterminada si el usuario no ha configurado una.
-
----
-
-## 3. Tecnologías a Utilizar
-
-| Capa | Tecnología | Descripción / Uso |
-|------|------------|-------------------|
-| **Frontend** | [React](https://react.dev/) | Librería para la construcción de interfaces interactivas y modulares. |
-| **Build Tool** | [Vite](https://vitejs.dev/) | Entorno de desarrollo ultrarrápido y empaquetador del frontend. |
-| **Base de datos** | [MongoDB](https://www.mongodb.com/) | Base de datos NoSQL para almacenar usuarios, catálogo audiovisual y géneros. |
-
----
-
-## 4. Temática y Estilo Visual
-
-- 🎨 **Paleta de color ochentera:** Colores intensos, contrastes dinámicos y acentos neón.
-- 🔷 **Geometría Bauhaus:** Uso de figuras geométricas básicas (círculos, triángulos, rectángulos) y diagramación limpia.
-- 🖼️ **Arte Pop:** Tipografías contundentes, bloques de color sólidos y estética retro vibrante.
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
