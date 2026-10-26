@@ -1,0 +1,53 @@
+
+/* ====================================
+   SEARCH RESULTS - CINETIKA
+==================================== */
+
+.search-results {
+  min-height: 100vh;
+  padding: 35px 5% 60px;
+
+  background: var(--color-background);
+  color: var(--color-text-primary);
+  font-family: var(--font-primary);
+}
+
+/* ====================================
+   ENCABEZADO
+==================================== */
+
+.search-results__header {
+  margin-bottom: 28px;
+}
+
+.search-results__header h1 {
+  margin: 0 0 10px;
+
+  font-size: clamp(22px, 3vw, 32px);
+  font-weight: 700;
+}
+
+.search-results__header p {
+  margin: 0;
+
+  color: var(--color-text-secondary);
+  font-size: 13px;
+}
+
+/* ====================================
+   RESPONSIVE
+==================================== */
+
+@media (max-width: 480px) {
+  .search-results {
+    padding: 24px 5% 45px;
+  }
+
+  .search-results__header {
+    margin-bottom: 20px;
+  }
+
+  .search-results__header h1 {
+    font-size: 21px;
+  }
+}

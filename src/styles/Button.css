@@ -1,0 +1,226 @@
+
+/* ====================================
+   BUTTON - CINETIKA
+==================================== */
+
+.cinetika-button {
+  --button-height: 40px;
+  --button-padding-x: 18px;
+  --button-font-size: 14px;
+
+  position: relative;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  min-height: var(--button-height);
+  padding: 8px var(--button-padding-x);
+
+  border: 2px solid transparent;
+  border-radius: 0;
+
+  font-family: var(--font-primary);
+  font-size: var(--button-font-size);
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+
+  text-decoration: none;
+  cursor: pointer;
+
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease,
+    opacity 150ms ease,
+    transform 150ms ease;
+}
+
+/* ====================================
+   DECORACIÓN INFERIOR AMARILLA
+   Botones sólidos
+==================================== */
+
+.cinetika-button--primary::after,
+.cinetika-button--secondary::after {
+  content: "";
+
+  position: absolute;
+  bottom: -2px;
+  left: 29%;
+
+  width: 42%;
+  height: 4px;
+
+  background-color: var(--color-accent);
+  pointer-events: none;
+}
+
+/* ====================================
+   PRIMARY - ROJO
+==================================== */
+
+.cinetika-button--primary {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-text-primary);
+}
+
+.cinetika-button--primary:hover:not(:disabled) {
+  background-color: #B92020;
+  border-color: #B92020;
+}
+
+/* ====================================
+   SECONDARY - AZUL
+==================================== */
+
+.cinetika-button--secondary {
+  background-color: var(--color-secondary);
+  border-color: var(--color-secondary);
+  color: var(--color-text-primary);
+}
+
+.cinetika-button--secondary:hover:not(:disabled) {
+  background-color: #14517F;
+  border-color: #14517F;
+}
+
+/* ====================================
+   OUTLINE - BORDE AZUL OSCURO
+==================================== */
+
+.cinetika-button--outline {
+  background-color: transparent;
+  border-color: var(--color-secondary);
+  color: var(--color-text-primary);
+}
+
+/* Franja superior roja */
+
+.cinetika-button--outline::before {
+  content: "";
+
+  position: absolute;
+  top: -2px;
+  left: -2px;
+
+  width: 40%;
+  height: 4px;
+
+  background-color: var(--color-primary);
+  pointer-events: none;
+}
+
+/* Franja superior azul */
+
+.cinetika-button--outline::after {
+  content: "";
+
+  position: absolute;
+  top: -2px;
+  left: calc(40% - 2px);
+
+  width: 20%;
+  height: 4px;
+
+  background-color: var(--color-secondary);
+  pointer-events: none;
+}
+
+.cinetika-button--outline:hover:not(:disabled) {
+  background-color: rgba(26, 101, 158, 0.18);
+}
+
+/* ====================================
+   ICONOS
+==================================== */
+
+.cinetika-button__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  width: 20px;
+  height: 20px;
+}
+
+.cinetika-button__icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Icono amarillo en outline */
+
+.cinetika-button--outline .cinetika-button__icon {
+  color: var(--color-accent);
+}
+
+/* ====================================
+   TAMAÑOS
+==================================== */
+
+.cinetika-button--sm {
+  --button-height: 32px;
+  --button-padding-x: 12px;
+  --button-font-size: 12px;
+
+  gap: 7px;
+}
+
+.cinetika-button--sm .cinetika-button__icon {
+  width: 16px;
+  height: 16px;
+}
+
+.cinetika-button--md {
+  --button-height: 40px;
+  --button-padding-x: 18px;
+  --button-font-size: 14px;
+}
+
+.cinetika-button--lg {
+  --button-height: 46px;
+  --button-padding-x: 22px;
+  --button-font-size: 16px;
+}
+
+.cinetika-button--lg .cinetika-button__icon {
+  width: 22px;
+  height: 22px;
+}
+
+/* ====================================
+   ANCHO COMPLETO
+==================================== */
+
+.cinetika-button--full {
+  width: 100%;
+}
+
+/* ====================================
+   ESTADOS
+==================================== */
+
+.cinetika-button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.cinetika-button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
+}
+
+.cinetika-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cinetika-button {
+    transition: none;
+  }
+}

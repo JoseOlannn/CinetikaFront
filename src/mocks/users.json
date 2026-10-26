@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "nombre": "Carlos García",
+    "user": "carlos80",
+    "correo": "carlos@demo.test",
+    "password": "Demo123!",
+    "foto_perfil": "/assets/avatars/1_v1.png"
+  },
+  {
+    "id": 2,
+    "nombre": "Ana López",
+    "user": "ana80",
+    "correo": "ana@demo.test",
+    "password": "Demo456!",
+    "foto_perfil": "/assets/avatars/2_v3.jpeg"
+  },
+  {
+    "id": 3,
+    "nombre": "Mario Torres",
+    "user": "mario80",
+    "correo": "mario@demo.test",
+    "password": "Demo789!",
+    "foto_perfil": null
+  }
+]

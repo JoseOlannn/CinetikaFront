@@ -1,0 +1,75 @@
+
+/* ====================================
+   CONTENT DETAIL - CINETIKA
+   ESTRUCTURA PROVISIONAL
+==================================== */
+
+.content-detail {
+  min-height: 100vh;
+  padding: 30px 5% 60px;
+
+  background: var(--color-background);
+  color: var(--color-text-primary);
+  font-family: var(--font-primary);
+}
+
+.content-detail__information {
+  display: flex;
+  align-items: flex-start;
+  gap: 28px;
+
+  margin-top: 24px;
+}
+
+.content-detail__images {
+  width: 240px;
+  flex-shrink: 0;
+}
+
+.content-detail__poster {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.content-detail__banner {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+.content-detail__data {
+  flex: 1;
+  min-width: 0;
+}
+
+.content-detail__data h2 {
+  margin: 0 0 16px;
+}
+
+.content-detail__data p {
+  line-height: 1.6;
+}
+
+.content-detail__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+
+  margin-top: 24px;
+}
+
+.content-detail__message {
+  color: var(--color-accent);
+}
+
+@media (max-width: 600px) {
+  .content-detail__information {
+    flex-direction: column;
+  }
+
+  .content-detail__images {
+    width: min(100%, 240px);
+  }
+}

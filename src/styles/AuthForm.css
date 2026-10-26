@@ -1,0 +1,225 @@
+
+/* ====================================
+   AUTH - CINETIKA
+==================================== */
+
+.auth-page {
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 40px 20px;
+
+  background-color: var(--color-background);
+  font-family: var(--font-primary);
+}
+
+/* ====================================
+   TARJETA CENTRAL
+==================================== */
+
+.auth-card {
+  width: 100%;
+  max-width: 460px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding: 24px 28px 32px;
+
+  background-color: rgba(20, 30, 60, 0.88);
+  border-radius: 12px;
+}
+
+/* ====================================
+   LOGO
+==================================== */
+
+.auth-card__logo {
+  display: block;
+
+  width: 100%;
+  max-width: 330px;
+  height: auto;
+
+  margin-bottom: 16px;
+
+  object-fit: contain;
+}
+
+/* ====================================
+   CONTENIDO
+==================================== */
+
+.auth-card__content {
+  width: 100%;
+  max-width: 330px;
+}
+
+.auth-card__title {
+  margin: 0 0 20px;
+
+  color: var(--color-text-primary);
+
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* ====================================
+   FORMULARIO
+==================================== */
+
+.auth-card__form {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Campos del formulario */
+
+.auth-card__form .cinetika-input {
+  width: 100%;
+}
+
+.auth-card__form .cinetika-input__field {
+  min-height: 40px;
+}
+
+/* ====================================
+   BOTONES
+==================================== */
+
+.auth-card__actions {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  margin-top: 2px;
+}
+
+/* ====================================
+   TABLET
+==================================== */
+
+@media (max-width: 768px) {
+  .auth-page {
+    padding: 24px 16px;
+  }
+
+  .auth-card {
+    max-width: 420px;
+    padding: 24px 24px 30px;
+  }
+
+  .auth-card__logo {
+    max-width: 300px;
+  }
+
+  .auth-card__title {
+    font-size: 20px;
+  }
+}
+
+/* ====================================
+   CELULARES
+==================================== */
+
+@media (max-width: 480px) {
+  .auth-page {
+    padding: 16px;
+  }
+
+  .auth-card {
+    max-width: 100%;
+    padding: 20px 18px 26px;
+    border-radius: 8px;
+  }
+
+  .auth-card__logo {
+    max-width: 260px;
+    margin-bottom: 12px;
+  }
+
+  .auth-card__content {
+    max-width: 100%;
+  }
+
+  .auth-card__title {
+    font-size: 19px;
+    margin-bottom: 18px;
+  }
+
+  .auth-card__form {
+    gap: 16px;
+  }
+
+  .auth-card__actions {
+    gap: 8px;
+  }
+
+  .auth-card__actions .cinetika-button {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding-left: 9px;
+    padding-right: 9px;
+    font-size: 11px;
+  }
+}
+
+/* ====================================
+   CELULARES MUY ESTRECHOS
+==================================== */
+
+@media (max-width: 340px) {
+  .auth-card__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .auth-card__actions .cinetika-button {
+    width: 100%;
+    flex: none;
+  }
+}
+
+/* Mensajes de autenticación */
+
+.auth-card__error {
+  margin: 0;
+  padding: 9px 12px;
+
+  background-color: rgba(214, 40, 40, 0.12);
+  border-left: 3px solid var(--color-primary);
+
+  color: var(--color-text-primary);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* ====================================
+   REGISTRO SIMULADO EXITOSO
+==================================== */
+
+.auth-card__success {
+  margin: 0;
+  padding: 10px 12px;
+
+  background-color: rgba(26, 101, 158, 0.15);
+  border-left: 3px solid var(--color-secondary);
+
+  color: var(--color-text-primary);
+  font-size: 12px;
+  line-height: 1.6;
+}

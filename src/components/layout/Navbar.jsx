@@ -16,7 +16,7 @@ import '../../styles/Navbar.css';
 const navigation = [
   {
     label: 'Inicio',
-    to: '/inicio',
+    to: '/catalogo',
     tipo: null,
   },
   {
@@ -42,16 +42,20 @@ const DEFAULT_AVATAR = '/images/default-avatar.png';
 // NAVBAR PRINCIPAL
 // ====================================
 
-// La key reinicia los estados internos cuando cambia la ruta.
-// Así evitamos llamar setState directamente dentro de un useEffect.
+// La key reinicia los estados internos al cambiar la ruta.
+// Así evitamos usar setState directamente dentro de un useEffect.
 
-export default function Navbar({ usuario = null }) {
+export default function Navbar({
+  usuario = null,
+  onLogout,
+}) {
   const location = useLocation();
 
   return (
     <NavbarContent
       key={`${location.pathname}${location.search}`}
       usuario={usuario}
+      onLogout={onLogout}
     />
   );
 }
@@ -60,7 +64,7 @@ export default function Navbar({ usuario = null }) {
 // CONTENIDO DEL NAVBAR
 // ====================================
 
-function NavbarContent({ usuario }) {
+function NavbarContent({ usuario, onLogout }) {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -69,7 +73,7 @@ function NavbarContent({ usuario }) {
   const [profileOpen, setProfileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
 
-  // Mantener la consulta cuando estamos en /buscar
+  // Texto del buscador
   const [search, setSearch] = useState(() => {
     if (location.pathname !== '/buscar') {
       return '';
@@ -80,41 +84,45 @@ function NavbarContent({ usuario }) {
     );
   });
 
-  // Referencias para detectar clics fuera
+  // Referencias para cerrar menús al hacer clic fuera
   const navbarRef = useRef(null);
   const profileRef = useRef(null);
 
-  // Categoría seleccionada
+  // Tipo de audiovisual seleccionado
   const tipoActual = new URLSearchParams(
     location.search
   ).get('tipo');
 
-  // Foto de perfil
+  // Avatar del usuario
   const avatarUrl =
     usuario?.foto_perfil || DEFAULT_AVATAR;
 
   // ====================================
-  // ENLACE ACTIVO
+  // DETECTAR ENLACE ACTIVO
   // ====================================
 
   function isSelected(item) {
-    if (item.tipo === null) {
-      return location.pathname === '/inicio';
+    // En búsqueda no se selecciona ninguna categoría
+    if (location.pathname !== '/catalogo') {
+      return false;
     }
 
-    return (
-      location.pathname === '/catalogo' &&
-      tipoActual === item.tipo
-    );
+    // Inicio muestra todos los audiovisuales
+    if (item.tipo === null) {
+      return tipoActual === null;
+    }
+
+    // Las otras opciones dependen del tipo
+    return tipoActual === item.tipo;
   }
 
   // ====================================
-  // CERRAR MENÚS CON CLIC FUERA / ESCAPE
+  // CERRAR MENÚS
   // ====================================
 
   useEffect(() => {
     function handlePointerDown(event) {
-      // Cerrar menú de perfil si se hace clic fuera
+      // Cerrar perfil al hacer clic fuera
       if (
         profileRef.current &&
         !profileRef.current.contains(event.target)
@@ -122,7 +130,7 @@ function NavbarContent({ usuario }) {
         setProfileOpen(false);
       }
 
-      // Cerrar menú móvil o buscador si se hace clic fuera
+      // Cerrar navegación y búsqueda al hacer clic fuera
       if (
         navbarRef.current &&
         !navbarRef.current.contains(event.target)
@@ -186,6 +194,22 @@ function NavbarContent({ usuario }) {
   }
 
   // ====================================
+  // CERRAR SESIÓN SIMULADA
+  // ====================================
+
+  function handleLogout() {
+    // Limpia el usuario guardado en App.jsx
+    onLogout?.();
+
+    setProfileOpen(false);
+    setMobileOpen(false);
+    setSearchOpen(false);
+
+    // Regresar al Login
+    navigate('/');
+  }
+
+  // ====================================
   // RENDERIZADO
   // ====================================
 
@@ -215,7 +239,7 @@ function NavbarContent({ usuario }) {
 
         {/* LOGO */}
         <NavLink
-          to="/inicio"
+          to="/catalogo"
           className="navbar__logo"
           aria-label="Cinetika - Inicio"
         >
@@ -225,7 +249,7 @@ function NavbarContent({ usuario }) {
           />
         </NavLink>
 
-        {/* BUSCADOR */}
+        {/* BUSCADOR GLOBAL */}
         <form
           id="navbar-search"
           className={`navbar__search ${
@@ -274,7 +298,7 @@ function NavbarContent({ usuario }) {
         {/* ACCIONES DERECHAS */}
         <div className="navbar__actions">
 
-          {/* LUPA PARA MÓVIL */}
+          {/* LUPA PARA CELULARES */}
           <button
             type="button"
             className="navbar__search-toggle"
@@ -331,7 +355,9 @@ function NavbarContent({ usuario }) {
                 setSearchOpen(false);
               }}
             >
+              {/* AVATAR */}
               <img
+                key={avatarUrl}
                 src={avatarUrl}
                 alt=""
                 className="navbar__avatar"
@@ -364,18 +390,23 @@ function NavbarContent({ usuario }) {
                 id="navbar-profile-menu"
                 className="navbar__profile-menu"
               >
-                {/* Pendiente de integrar la página de perfil */}
+                {/*Editar perfil */}
                 <button
                   type="button"
                   className="navbar__profile-option"
+                  onClick={() => {
+                    setProfileOpen(false);
+                    navigate('/perfil/editar');
+                  }}
                 >
                   Editar perfil
                 </button>
 
-                {/* Pendiente de integrar autenticación */}
+                {/* CERRAR SESIÓN */}
                 <button
                   type="button"
                   className="navbar__profile-option"
+                  onClick={handleLogout}
                 >
                   Cerrar sesión
                 </button>
