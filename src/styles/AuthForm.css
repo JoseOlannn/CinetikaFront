@@ -4,6 +4,9 @@
 ==================================== */
 
 .auth-page {
+  position: relative; /*posicionar el fondo respecto a la página*/     
+  overflow: hidden;
+
   width: 100%;
   min-height: 100vh;
   min-height: 100dvh;
@@ -23,6 +26,10 @@
 ==================================== */
 
 .auth-card {
+  position: relative;      
+  z-index: 2;  /*tarjeta por encima del fondo*/            
+  backdrop-filter: blur(6px); /*difuminado*/
+
   width: 100%;
   max-width: 460px;
 
@@ -222,4 +229,43 @@
   color: var(--color-text-primary);
   font-size: 12px;
   line-height: 1.6;
+}
+
+
+/*ESTILOS FONDO*/
+
+.fondo {
+  position: absolute;
+  inset: -15%;                 /* evitar huecos al sesgar */
+  z-index: 0;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);   
+  gap: 32px;
+  transform: skewX(-10deg);
+  pointer-events: none;
+}
+
+.fondo img {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+/* columnas alternadas más abajo */
+.fondo img:nth-child(even) {
+  transform: translateY(40px);
+}
+
+@media (max-width: 900px) {
+  .fondo {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .fondo {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
 }

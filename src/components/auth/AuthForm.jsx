@@ -8,7 +8,9 @@ import Button from '../ui/Button.jsx';
 import { login } from '../../services/authService.js';
 import mockUsers from '../../mocks/users.json';
 
-import '../../styles/AuthForm.css';
+import '../../styles/AuthForm.css'; 
+
+import FondoPortadas from './FondoPortadas.jsx'; /*import del componente fondo*/
 
 // ====================================
 // VALIDACIONES
@@ -155,6 +157,7 @@ export default function AuthForm({
 
   return (
     <main className="auth-page">
+      <FondoPortadas />  
       <section
         className="auth-card"
         aria-labelledby="auth-title"
