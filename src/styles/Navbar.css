@@ -1,0 +1,415 @@
+
+/* NAVBAR - CINETIKA */
+
+.navbar {
+  --navbar-height: 80px;
+
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  background-color: #000920;
+  color: var(--color-text-primary);
+  font-family: var(--font-primary);
+
+  
+}
+
+.navbar__container {
+  width: 100%;
+  max-width: 1600px;
+  min-height: var(--navbar-height);
+
+  margin: 0 auto;
+  padding: 8px 24px;
+
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 2vw, 32px);
+}
+
+/* LOGO */
+
+.navbar__logo {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.navbar__logo img {
+  display: block;
+  width: auto;
+  height: 60px;
+  max-width: 160px;
+  object-fit: contain;
+}
+
+/* BUSCADOR: solo distribución */
+
+.navbar__search {
+  flex: 1 1 auto;
+  width: auto;
+  min-width: 140px;
+  max-width: none;
+}
+
+.navbar__search .cinetika-input {
+  width: 100%;
+}
+
+/* NAVEGACIÓN */
+
+.navbar__links {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  gap: 24px;
+
+  flex: 0 0 auto;
+  margin-left: 0;
+}
+
+.navbar__link {
+  position: relative;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 10px 0;
+
+  color: var(--color-text-primary);
+  text-decoration: none;
+  white-space: nowrap;
+
+  font-size: 12px;
+  font-weight: 500;
+
+  transition: color 150ms ease;
+}
+
+.navbar__link::before {
+  content: "";
+
+  width: 8px;
+  height: 8px;
+  flex-shrink: 0;
+
+  background-color: var(--color-accent);
+  border-radius: 50%;
+}
+
+.navbar__link:hover {
+  color: var(--color-accent);
+}
+
+.navbar__link--active {
+  color: var(--color-accent);
+  font-weight: 700;
+}
+
+.navbar__link--active::after {
+  content: "";
+
+  position: absolute;
+  bottom: 5px;
+  left: 16px;
+  right: 0;
+
+  height: 2px;
+  background-color: var(--color-primary);
+}
+
+/* ACCIONES */
+
+.navbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  margin-left: 0;
+  flex-shrink: 0;
+}
+
+/* PERFIL */
+
+.navbar__profile {
+  position: relative;
+  width: 140px;
+  flex-shrink: 0;
+}
+
+.navbar__profile-button {
+  width: 100%;
+  min-height: 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  padding: 5px 8px;
+  border: none;
+  border-radius: 0;
+
+  background-color: var(--color-primary);
+  color: var(--color-text-primary);
+
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+
+  cursor: pointer;
+}
+
+.navbar__avatar {
+  display: block;
+
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+
+  border-radius: 50%;
+  object-fit: contain;
+}
+
+.navbar__arrow {
+  color: var(--color-accent);
+  font-size: 16px;
+  line-height: 1;
+
+  transition: transform 150ms ease;
+}
+
+.navbar__arrow--open {
+  transform: rotate(180deg);
+}
+
+.navbar__profile-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+
+  width: 100%;
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  background-color: var(--color-secondary);
+  box-shadow: 0 8px 20px rgb(0 0 0 / 25%);
+}
+
+.navbar__profile-option {
+  display: block;
+  width: 100%;
+
+  padding: 10px 8px;
+  border: none;
+  border-radius: 0;
+
+  background-color: var(--color-secondary);
+  color: var(--color-text-primary);
+
+  font-family: inherit;
+  font-size: 12px;
+  text-align: center;
+
+  cursor: pointer;
+  transition: background-color 150ms ease;
+}
+
+.navbar__profile-option:hover {
+  background-color: #14517F;
+}
+
+/* CONTROLES MÓVILES */
+
+.navbar__hamburger,
+.navbar__search-toggle {
+  display: none;
+}
+
+/* TABLETS Y PANTALLAS INTERMEDIAS */
+
+@media (min-width: 769px) and (max-width: 1100px) {
+  .navbar__container {
+    padding: 8px 16px;
+    gap: 12px;
+  }
+
+  .navbar__logo img {
+    height: 48px;
+  }
+
+  .navbar__links {
+    gap: 12px;
+  }
+
+  .navbar__link {
+    gap: 5px;
+    font-size: 11px;
+  }
+
+  .navbar__search {
+    min-width: 100px;
+  }
+
+  .navbar__profile {
+    width: 120px;
+  }
+}
+
+/* MÓVIL: 768 px O MENOS */
+
+@media (max-width: 768px) {
+  .navbar {
+    --navbar-height: 64px;
+  }
+
+  .navbar__container {
+    min-height: var(--navbar-height);
+    padding: 8px 16px;
+    gap: 14px;
+  }
+
+  .navbar__hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+
+    width: 30px;
+    height: 34px;
+
+    padding: 4px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .navbar__hamburger-line {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background-color: var(--color-text-primary);
+  }
+
+  .navbar__logo img {
+    height: 44px;
+    max-width: 120px;
+  }
+
+  .navbar__search {
+    display: none;
+
+    position: absolute;
+    top: 100%;
+    left: 0;
+
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+
+    padding: 12px 16px;
+    background-color: #000920;
+
+    box-shadow: 0 10px 20px rgb(0 0 0 / 25%);
+  }
+
+  .navbar__search--open {
+    display: block;
+  }
+
+  .navbar__search-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 34px;
+    height: 34px;
+
+    padding: 5px;
+    border: none;
+    background: transparent;
+
+    color: var(--color-text-primary);
+    cursor: pointer;
+  }
+
+  .navbar__links {
+    display: none;
+
+    position: absolute;
+    top: 100%;
+    left: 0;
+
+    width: 100%;
+    margin: 0;
+    padding: 20px;
+
+    background-color: #000920;
+    box-shadow: 0 10px 20px rgb(0 0 0 / 25%);
+
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .navbar__links--open {
+    display: flex;
+  }
+
+  .navbar__link {
+    font-size: 14px;
+  }
+
+  .navbar__actions {
+    margin-left: auto;
+  }
+
+  .navbar__profile {
+    width: auto;
+  }
+
+  .navbar__profile-label {
+    display: none;
+  }
+
+  .navbar__profile-button {
+    min-height: 34px;
+    padding: 4px 7px;
+  }
+
+  .navbar__avatar {
+    width: 22px;
+    height: 22px;
+  }
+
+  .navbar__profile-menu {
+    right: 0;
+    left: auto;
+    width: 140px;
+  }
+}
+
+/* CELULARES PEQUEÑOS */
+
+@media (max-width: 480px) {
+  .navbar__container {
+    padding: 8px 12px;
+    gap: 10px;
+  }
+
+  .navbar__logo img {
+    height: 40px;
+    max-width: 105px;
+  }
+
+  .navbar__actions {
+    gap: 6px;
+  }
+}

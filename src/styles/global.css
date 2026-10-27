@@ -1,0 +1,42 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+  --color-primary: #D62828;
+  --color-secondary: #1A659E;
+  --color-accent: #F4A226;
+
+  --color-background: #0B132B;
+  --color-surface: #141E3C;
+
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: #64748B;
+
+  --font-primary: 'Montserrat', sans-serif;
+  --font-secondary: 'Plus Jakarta Sans', sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  font-family: var(--font-primary);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}

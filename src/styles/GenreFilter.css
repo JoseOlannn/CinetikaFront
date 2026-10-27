@@ -1,0 +1,167 @@
+
+/* ====================================
+   GENRE FILTER - CINETIKA
+==================================== */
+
+.genre-filter {
+  width: 100%;
+  margin-bottom: 32px;
+}
+
+/* ====================================
+   SELECTOR
+==================================== */
+
+.genre-filter__select-wrapper {
+  position: relative;
+
+  width: 100%;
+  max-width: 370px;
+
+  background: var(--color-surface);
+}
+
+/* Franja superior roja y azul */
+.genre-filter__select-wrapper::before {
+  content: "";
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+
+  width: 60%;
+  height: 4px;
+
+  background: linear-gradient(
+    to right,
+    var(--color-primary) 0%,
+    var(--color-primary) 28%,
+    var(--color-secondary) 28%,
+    var(--color-secondary) 100%
+  );
+
+  pointer-events: none;
+}
+
+.genre-filter__select {
+  appearance: none;
+  -webkit-appearance: none;
+
+  display: block;
+  width: 100%;
+  min-height: 52px;
+
+  padding: 13px 54px 13px 16px;
+
+  border: 1px solid transparent;
+  border-radius: 0;
+
+  background: transparent;
+  color: var(--color-text-primary);
+
+  font-family: var(--font-primary);
+  font-size: 17px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+/* Opciones del selector nativo */
+.genre-filter__select option {
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+}
+
+.genre-filter__select:hover {
+  border-color: var(--color-secondary);
+}
+
+.genre-filter__select:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+/* Flecha */
+.genre-filter__chevron {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 24px;
+  height: 24px;
+
+  color: #fff;
+  pointer-events: none;
+}
+
+.genre-filter__chevron svg {
+  width: 24px;
+  height: 24px;
+
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ====================================
+   DESCRIPCIÓN DEL GÉNERO
+==================================== */
+
+.genre-filter__description {
+  max-width: 790px;
+  margin-top: 18px;
+}
+
+.genre-filter__description p {
+  margin: 0;
+
+  color: #cbd5e1;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+@media (max-width: 480px) {
+  .genre-filter__description {
+    margin-top: 14px;
+  }
+
+  .genre-filter__description p {
+    font-size: 12px;
+  }
+}
+
+/* ====================================
+   RESPONSIVE
+==================================== */
+
+@media (max-width: 480px) {
+  .genre-filter__select-wrapper {
+    max-width: 100%;
+  }
+
+  .genre-filter__select {
+    font-size: 15px;
+    min-height: 48px;
+  }
+
+  .genre-filter__description {
+    margin-top: 20px;
+  }
+
+  .genre-filter__description h2 {
+    font-size: 20px;
+  }
+
+  .genre-filter__description p {
+    font-size: 12px;
+  }
+}

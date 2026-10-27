@@ -1,0 +1,563 @@
+
+/* ====================================
+   FEATURED BANNER - CINETIKA
+==================================== */
+
+.featured-banner {
+  position: relative;
+  isolation: isolate;
+
+  width: 100%;
+  height: clamp(380px, 39vw, 650px);
+  min-height: 380px;
+
+  display: flex;
+  align-items: center;
+
+  overflow: hidden;
+
+  background-color: #05070d;
+  color: var(--color-text-primary);
+  font-family: var(--font-primary);
+}
+
+/* ====================================
+   CAPA 1: IMÁGENES
+==================================== */
+
+.featured-banner__background {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+
+  width: 100%;
+  height: 100%;
+
+  overflow: hidden;
+  background-color: #05070d;
+}
+
+/* Fondo ampliado y difuminado */
+
+.featured-banner__image-blur {
+  position: absolute;
+  inset: -25px;
+
+  display: block;
+
+  width: calc(100% + 50px);
+  height: calc(100% + 50px);
+
+  object-fit: cover;
+  object-position: right center;
+
+  filter: blur(20px) brightness(0.32);
+  transform: scale(1.03);
+}
+
+/* Imagen principal completa, sin deformaciones */
+
+.featured-banner__image {
+  position: absolute;
+  inset: 0;
+
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+  object-position: right center;
+}
+
+/* Si no existe ninguna imagen */
+
+.featured-banner__fallback {
+  width: 100%;
+  height: 100%;
+
+  background: linear-gradient(
+    115deg,
+    #05070d 0%,
+    #0b132b 55%,
+    #17284b 100%
+  );
+}
+
+/* ====================================
+   CAPA 2: DEGRADADO CINEMATOGRÁFICO
+==================================== */
+
+.featured-banner__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(5, 7, 13, 0.80) 0%,
+      rgba(5, 7, 13, 0.58) 20%,
+      rgba(5, 7, 13, 0.31) 40%,
+      rgba(5, 7, 13, 0.10) 65%,
+      rgba(5, 7, 13, 0) 100%
+    ),
+    linear-gradient(
+      0deg,
+      rgba(5, 7, 13, 0.58) 0%,
+      transparent 27%,
+      transparent 85%,
+      rgba(5, 7, 13, 0.20) 100%
+    );
+}
+
+/* ====================================
+   CAPA 3: INFORMACIÓN SUPERPUESTA
+==================================== */
+
+.featured-banner__content {
+  position: relative;
+  z-index: 2;
+
+  width: 100%;
+  max-width: 780px;
+
+  padding: 45px 5% 75px;
+  align-self: center;
+}
+
+/* ====================================
+   METADATOS
+==================================== */
+
+.featured-banner__metadata {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+
+  margin-bottom: 16px;
+
+  color: var(--color-accent);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.featured-banner__rating {
+  padding: 5px 7px;
+
+  border: 1px solid var(--color-secondary);
+  background-color: rgba(11, 19, 43, 0.65);
+}
+
+/* ====================================
+   TÍTULO
+==================================== */
+
+.featured-banner__title {
+  max-width: 650px;
+  margin: 0 0 18px;
+
+  color: #ffffff;
+
+  font-size: clamp(32px, 4.2vw, 60px);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -1px;
+
+  /* Saltar entre palabras, no dentro de ellas */
+  white-space: normal;
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
+}
+
+/* ====================================
+   SINOPSIS
+==================================== */
+
+.featured-banner__synopsis {
+  max-width: 440px;
+  margin: 0;
+
+  color: rgba(255, 255, 255, 0.96);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+/* ====================================
+   BOTONES DE ACCIÓN
+==================================== */
+
+.featured-banner__actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+
+  margin-top: 25px;
+}
+
+/*
+ * Ver y Ver tráiler utilizan Button.jsx.
+ * Sus estilos se encuentran en Button.css.
+ */
+
+/* ====================================
+   CAPA 4: NAVEGACIÓN
+==================================== */
+
+.featured-banner__navigation {
+  position: absolute;
+  z-index: 3;
+
+  left: 50%;
+  bottom: 22px;
+
+  transform: translateX(-50%);
+
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/*
+ * Las flechas utilizan IconButton.jsx.
+ * Sus estilos se encuentran en IconButton.css.
+ */
+
+/* ====================================
+   INDICADORES RETRO / BAUHAUS
+==================================== */
+
+.featured-banner__dots {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.featured-banner__dot {
+  width: 10px;
+  height: 10px;
+
+  flex-shrink: 0;
+
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+
+  background-color: var(--color-secondary);
+  opacity: 0.75;
+
+  cursor: pointer;
+
+  transition:
+    width 0.2s ease,
+    background-color 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.featured-banner__dot:hover {
+  background-color: var(--color-primary);
+  opacity: 1;
+}
+
+/* Diapositiva seleccionada */
+
+.featured-banner__dot--active {
+  width: 32px;
+  height: 10px;
+
+  background-color: var(--color-accent);
+  opacity: 1;
+}
+
+.featured-banner__dot--active:hover {
+  background-color: var(--color-accent);
+}
+
+.featured-banner__dot:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
+}
+
+/* ====================================
+   SIN AUDIOVISUALES
+==================================== */
+
+.featured-banner--empty {
+  height: 300px;
+  min-height: 300px;
+
+  justify-content: center;
+  padding: 24px;
+
+  color: var(--color-text-secondary);
+}
+
+/* ====================================
+   DIÁLOGOS SIMULADOS
+==================================== */
+
+.featured-banner__modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background-color: rgba(0, 0, 0, 0.80);
+}
+
+.featured-banner__modal {
+  position: relative;
+
+  width: 100%;
+  max-width: 480px;
+
+  padding: 32px;
+
+  border: 1px solid var(--color-secondary);
+  border-radius: 10px;
+
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  font-family: var(--font-primary);
+}
+
+.featured-banner__modal h2 {
+  margin: 0 0 16px;
+
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.featured-banner__modal p {
+  margin: 0 0 14px;
+
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.featured-banner__modal-meta {
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+.featured-banner__modal-note {
+  padding-top: 12px;
+
+  border-top: 1px solid var(--color-secondary);
+  color: var(--color-text-secondary);
+}
+
+.featured-banner__modal-close {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+
+  padding: 0;
+  border: none;
+  background: transparent;
+
+  color: #ffffff;
+  font-size: 28px;
+
+  cursor: pointer;
+}
+
+.featured-banner__modal-close:hover {
+  color: var(--color-accent);
+}
+
+.featured-banner__modal-close:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
+}
+
+/* ====================================
+   TABLET
+==================================== */
+
+@media (max-width: 768px) {
+  .featured-banner {
+    height: clamp(340px, 58vw, 470px);
+    min-height: 340px;
+  }
+
+  .featured-banner__content {
+    width: 76%;
+    max-width: 550px;
+
+    padding: 28px 5% 65px;
+  }
+
+  .featured-banner__metadata {
+    gap: 8px;
+    margin-bottom: 10px;
+    font-size: 10px;
+  }
+
+  .featured-banner__title {
+    margin-bottom: 12px;
+
+    font-size: clamp(25px, 5vw, 42px);
+    line-height: 1.1;
+  }
+
+  .featured-banner__synopsis {
+    max-width: 350px;
+    font-size: 11px;
+    line-height: 1.5;
+  }
+
+  .featured-banner__actions {
+    margin-top: 16px;
+  }
+
+  .featured-banner__overlay {
+    background:
+      linear-gradient(
+        90deg,
+        rgba(5, 7, 13, 0.86) 0%,
+        rgba(5, 7, 13, 0.59) 30%,
+        rgba(5, 7, 13, 0.24) 70%,
+        transparent 100%
+      ),
+      linear-gradient(
+        0deg,
+        rgba(5, 7, 13, 0.53) 0%,
+        transparent 32%
+      );
+  }
+}
+
+/* ====================================
+   CELULARES
+==================================== */
+
+@media (max-width: 480px) {
+  .featured-banner {
+    height: 360px;
+    min-height: 360px;
+
+    align-items: center;
+  }
+
+  .featured-banner__content {
+    width: 82%;
+    max-width: none;
+
+    padding: 18px 5% 55px;
+  }
+
+  .featured-banner__metadata {
+    gap: 5px;
+    margin-bottom: 8px;
+    font-size: 8px;
+  }
+
+  .featured-banner__rating {
+    padding: 3px 4px;
+  }
+
+  .featured-banner__title {
+    margin-bottom: 9px;
+
+    font-size: clamp(21px, 6vw, 29px);
+    line-height: 1.12;
+    letter-spacing: -0.5px;
+  }
+
+  .featured-banner__synopsis {
+    max-width: 100%;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+
+    overflow: hidden;
+
+    font-size: 10px;
+    line-height: 1.4;
+  }
+
+  .featured-banner__actions {
+    margin-top: 12px;
+    gap: 7px;
+  }
+
+  /* Botones reutilizables, tamaño compacto */
+
+  .featured-banner__actions .cinetika-button {
+    --button-height: 30px;
+    --button-padding-x: 8px;
+    --button-font-size: 9px;
+
+    gap: 5px;
+  }
+
+  .featured-banner__actions .cinetika-button__icon {
+    width: 13px;
+    height: 13px;
+  }
+
+  /* Navegación inferior */
+
+  .featured-banner__navigation {
+    bottom: 12px;
+    gap: 9px;
+  }
+
+  .featured-banner__dots {
+    gap: 4px;
+  }
+
+  .featured-banner__dot {
+    width: 8px;
+    height: 8px;
+  }
+
+  .featured-banner__dot--active {
+    width: 24px;
+    height: 8px;
+  }
+
+  .featured-banner__modal {
+    padding: 24px 18px;
+  }
+
+  /* Imagen y texto integrados */
+
+  .featured-banner__overlay {
+    background:
+      linear-gradient(
+        90deg,
+        rgba(5, 7, 13, 0.88) 0%,
+        rgba(5, 7, 13, 0.67) 37%,
+        rgba(5, 7, 13, 0.22) 80%,
+        transparent 100%
+      ),
+      linear-gradient(
+        0deg,
+        rgba(5, 7, 13, 0.48),
+        transparent 30%
+      );
+  }
+}
+
+/* ====================================
+   MOVIMIENTO REDUCIDO
+==================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .featured-banner__dot {
+    transition: none;
+  }
+}

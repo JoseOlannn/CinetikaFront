@@ -1,0 +1,53 @@
+
+[
+  {
+    "id": 1,
+    "nombre": "Ciencia Ficción",
+    "descripcion": "Historias que exploran avances científicos, tecnologías futuras, viajes espaciales, mundos alternativos y sus consecuencias para la sociedad."
+  },
+  {
+    "id": 2,
+    "nombre": "Acción",
+    "descripcion": "Producciones caracterizadas por enfrentamientos, persecuciones, conflictos dinámicos y situaciones de riesgo."
+  },
+  {
+    "id": 3,
+    "nombre": "Drama",
+    "descripcion": "Narraciones centradas en las emociones, las relaciones humanas y los conflictos personales o sociales."
+  },
+  {
+    "id": 4,
+    "nombre": "Comedia",
+    "descripcion": "Historias que emplean el humor, las situaciones inesperadas y los personajes cómicos para entretener."
+  },
+  {
+    "id": 5,
+    "nombre": "Terror",
+    "descripcion": "Relatos que buscan generar miedo, tensión e inquietud mediante amenazas, situaciones sobrenaturales o elementos perturbadores."
+  },
+  {
+    "id": 6,
+    "nombre": "Animación",
+    "descripcion": "Producciones realizadas mediante técnicas de animación tradicional, digital o stop motion para representar personajes y escenarios."
+  },
+  {
+    "id": 7,
+    "nombre": "Aventura",
+    "descripcion": "Historias protagonizadas por personajes que emprenden viajes, exploraciones o desafíos extraordinarios."
+  },
+  {
+    "id": 8,
+    "nombre": "Fantasía",
+    "descripcion": "Narraciones que incorporan elementos mágicos, criaturas imaginarias y mundos que trascienden las leyes de la realidad."
+  },
+  {
+    "id": 9,
+    "nombre": "Misterio",
+    "descripcion": "Relatos construidos alrededor de enigmas, secretos e investigaciones cuya resolución se descubre progresivamente."
+  },
+  {
+    "id": 10,
+    "nombre": "Suspenso",
+    "descripcion": "Historias que mantienen la incertidumbre y la tensión mediante amenazas, giros inesperados y situaciones de peligro."
+  }
+]

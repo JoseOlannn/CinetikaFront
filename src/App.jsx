@@ -1,14 +1,94 @@
-import { Routes, Route, Navigate, useLocation } from 'react-router';
-import Home from './pages/Home.jsx';
+
+import { useState } from 'react';
+import { Routes, Route } from 'react-router';
+
+import MainLayout from './components/layout/MainLayout.jsx';
+
+import Login from './pages/Login.jsx';
+import Register from './pages/Register.jsx';
 import Catalogo from './pages/Catalogo.jsx';
+import SearchResults from './pages/SearchResults.jsx';
+import EditProfile from './pages/EditProfile.jsx';
+import ContentDetail from './pages/ContentDetail.jsx';
 
 export default function App() {
+  // ====================================
+  // USUARIO ACTUAL (MOCK)
+  // ====================================
+
+  const [usuario, setUsuario] = useState(null);
+
+  function handleLogin(usuarioAutenticado) {
+    setUsuario(usuarioAutenticado);
+  }
+
+  function handleLogout() {
+    setUsuario(null);
+  }
+
   return (
-    <>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/catalogo" element={<Catalogo />} />
-      </Routes>
-    </>
-  )
+    <Routes>
+      {/* ====================================
+          LOGIN
+      ==================================== */}
+
+      <Route
+        path="/"
+        element={
+          <Login onLogin={handleLogin} />
+        }
+      />
+
+      {/* ====================================
+          REGISTRO
+      ==================================== */}
+
+      <Route
+        path="/registro"
+        element={<Register />}
+      />
+
+      {/* ====================================
+          PÁGINAS CON NAVBAR
+      ==================================== */}
+
+      <Route
+        element={
+          <MainLayout
+            usuario={usuario}
+            onLogout={handleLogout}
+          />
+        }
+      >
+        {/* CATÁLOGO GENERAL Y POR CATEGORÍA */}
+        <Route
+          path="/catalogo"
+          element={<Catalogo />}
+        />
+
+        {/* RESULTADOS DE BÚSQUEDA */}
+        <Route
+          path="/buscar"
+          element={<SearchResults />}
+        />
+
+        {/* EDITAR PERFIL */}
+        <Route
+          path="/perfil/editar"
+          element={
+            <EditProfile
+              usuario={usuario}
+              onLogout={handleLogout}
+            />
+          }
+        />
+
+        {/* DETALLES DEL AUDIOVISUAL POR ID */}
+        <Route
+          path="/audiovisual/:id"
+          element={<ContentDetail />}
+        />
+      </Route>
+    </Routes>
+  );
 }
