@@ -1,24 +1,42 @@
-
-/*
- * CATALOG SERVICE - CINETIKA
- *
- * Datos simulados para desarrollo.
- * Se reemplazarán por peticiones a la API.
- */
-
+import { api } from './api.js';
 import mockContents from '../mocks/contents.json';
 import mockGenres from '../mocks/genres.json';
+
+// Cache en memoria para acceso sincrónico y rápido
+let cachedContents = [...mockContents];
+let cachedGenres = [...mockGenres];
+
+function normalizarItem(item) {
+  if (!item) return null;
+  const idStr = String(item.id || item._id);
+  return {
+    ...item,
+    id: idStr,
+    _id: item._id || idStr,
+    banner: item.banner || item.poster,
+    generos: Array.isArray(item.generos) ? item.generos : [],
+  };
+}
 
 // ====================================
 // OBTENER CATÁLOGO
 // ====================================
 
 export async function getContents() {
-  return mockContents;
+  try {
+    const data = await api.get('/catalogo');
+    if (Array.isArray(data) && data.length > 0) {
+      cachedContents = data.map(normalizarItem);
+      return cachedContents;
+    }
+  } catch (error) {
+    console.warn('No se pudo cargar el catálogo del backend, usando datos locales:', error.message);
+  }
+  return cachedContents;
 }
 
 export async function getGenres() {
-  return mockGenres;
+  return cachedGenres;
 }
 
 // ====================================
@@ -29,7 +47,7 @@ export function filterByCategory(contents, category) {
   if (!category) return contents;
 
   return contents.filter(
-    (item) => item.categoria === category
+    (item) => (item.categoria || '').toLowerCase() === category.toLowerCase()
   );
 }
 
@@ -37,12 +55,25 @@ export function filterByCategory(contents, category) {
 // FILTRAR POR GÉNERO
 // ====================================
 
-export function filterByGenre(contents, genreId) {
-  if (genreId === null) return contents;
+export function filterByGenre(contents, genreIdOrName) {
+  if (genreIdOrName === null || genreIdOrName === undefined || genreIdOrName === '') {
+    return contents;
+  }
 
-  return contents.filter(
-    (item) => item.generos.includes(genreId)
-  );
+  // Si nos pasan un ID numérico, buscar el nombre correspondiente en genres
+  const genreObj = cachedGenres.find((g) => g.id === genreIdOrName || g.nombre === genreIdOrName);
+  const targetName = genreObj ? genreObj.nombre.toLowerCase() : String(genreIdOrName).toLowerCase();
+
+  return contents.filter((item) => {
+    if (!Array.isArray(item.generos)) return false;
+
+    return item.generos.some((g) => {
+      if (typeof g === 'number') {
+        return g === genreIdOrName || (genreObj && g === genreObj.id);
+      }
+      return String(g).toLowerCase() === targetName || (genreObj && String(g).toLowerCase() === genreObj.nombre.toLowerCase());
+    });
+  });
 }
 
 // ====================================
@@ -50,11 +81,24 @@ export function filterByGenre(contents, genreId) {
 // ====================================
 
 export function getAvailableGenres(contents, genres) {
-  const ids = new Set(
-    contents.flatMap((item) => item.generos)
-  );
+  // Recopilar todos los géneros presentes en los contenidos
+  const presentes = new Set();
 
-  return genres.filter((genre) => ids.has(genre.id));
+  for (const item of contents) {
+    for (const g of item.generos || []) {
+      if (typeof g === 'number') {
+        presentes.add(g);
+      } else if (typeof g === 'string') {
+        // Mapear nombre de género al id si existe
+        const match = genres.find((gen) => gen.nombre.toLowerCase() === g.toLowerCase());
+        if (match) {
+          presentes.add(match.id);
+        }
+      }
+    }
+  }
+
+  return genres.filter((genre) => presentes.has(genre.id));
 }
 
 // ====================================
@@ -64,14 +108,9 @@ export function getAvailableGenres(contents, genres) {
 export function selectRandomBanner(contents, count = 5) {
   const shuffled = [...contents];
 
-  // Fisher-Yates: mezcla sin modificar el original.
   for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-
-    [shuffled[i], shuffled[j]] = [
-      shuffled[j],
-      shuffled[i],
-    ];
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
 
   return shuffled.slice(0, count);
@@ -79,15 +118,26 @@ export function selectRandomBanner(contents, count = 5) {
 
 export function getCatalogSnapshot() {
   return {
-    contents: mockContents,
-    genres: mockGenres,
+    contents: cachedContents,
+    genres: cachedGenres,
   };
 }
 
 export async function getContentById(id) {
-  const { contents } = getCatalogSnapshot();
+  const targetId = String(id);
 
-  return contents.find(
-    (item) => item.id === Number(id)
-  ) ?? null;
+  try {
+    const item = await api.get(`/catalogo/${targetId}`);
+    if (item) {
+      return normalizarItem(item);
+    }
+  } catch (error) {
+    console.warn(`No se encontró en backend /catalogo/${targetId}:`, error.message);
+  }
+
+  const found = cachedContents.find(
+    (item) => String(item.id) === targetId || String(item._id) === targetId
+  );
+
+  return found ? normalizarItem(found) : null;
 }
