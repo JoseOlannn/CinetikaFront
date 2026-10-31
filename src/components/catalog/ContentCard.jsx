@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 
 import Button from '../ui/Button.jsx';
@@ -18,7 +17,6 @@ export default function ContentCard({
 
   return (
     <article className="content-card">
-
       {/* PÓSTER */}
       <div className="content-card__poster">
         {!imageError && item.poster ? (
@@ -47,23 +45,24 @@ export default function ContentCard({
         </div>
       </div>
 
-      {/* INFORMACIÓN SIN FORMATO ESPECIAL */}
+      {/* INFORMACIÓN */}
       <div className="content-card__info">
         <p><strong>Nombre:</strong> {item.nombre}</p>
 
         <p>
           <strong>Categoría:</strong>{' '}
-          {CATEGORY_LABELS[item.categoria] ??
-            item.categoria}
+          {CATEGORY_LABELS[item.categoria] ?? item.categoria}
         </p>
 
         <p><strong>Año:</strong> {item.anio}</p>
 
-        <p><strong>Duración:</strong> {item.duracion}</p>
+        {item.duracion && (
+          <p><strong>Duración:</strong> {item.duracion}</p>
+        )}
 
         <p>
           <strong>Calificación:</strong>{' '}
-          {item.calificacion}/5
+          {item.calificacion ? `${item.calificacion}/5` : 'Sin calificar'}
         </p>
       </div>
     </article>
