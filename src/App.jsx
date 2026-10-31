@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Routes, Route } from 'react-router';
 
@@ -11,18 +10,18 @@ import SearchResults from './pages/SearchResults.jsx';
 import EditProfile from './pages/EditProfile.jsx';
 import ContentDetail from './pages/ContentDetail.jsx';
 
-export default function App() {
-  // ====================================
-  // USUARIO ACTUAL (MOCK)
-  // ====================================
+import { getCurrentUser, logout } from './services/authService.js';
 
-  const [usuario, setUsuario] = useState(null);
+export default function App() {
+  // Rehidratar el usuario desde localStorage si ya había iniciado sesión
+  const [usuario, setUsuario] = useState(() => getCurrentUser());
 
   function handleLogin(usuarioAutenticado) {
     setUsuario(usuarioAutenticado);
   }
 
   function handleLogout() {
+    logout();
     setUsuario(null);
   }
 
@@ -31,7 +30,6 @@ export default function App() {
       {/* ====================================
           LOGIN
       ==================================== */}
-
       <Route
         path="/"
         element={
@@ -42,16 +40,14 @@ export default function App() {
       {/* ====================================
           REGISTRO
       ==================================== */}
-
       <Route
         path="/registro"
-        element={<Register />}
+        element={<Register onLogin={handleLogin} />}
       />
 
       {/* ====================================
           PÁGINAS CON NAVBAR
       ==================================== */}
-
       <Route
         element={
           <MainLayout

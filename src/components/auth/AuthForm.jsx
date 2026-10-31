@@ -1,26 +1,23 @@
-
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 
 import Input from '../ui/Input.jsx';
 import Button from '../ui/Button.jsx';
 
-import { login } from '../../services/authService.js';
-import mockUsers from '../../mocks/users.json';
+import { login, register } from '../../services/authService.js';
+import '../../styles/AuthForm.css';
 
-import '../../styles/AuthForm.css'; 
-
-import FondoPortadas from './FondoPortadas.jsx'; /*import del componente fondo*/
+import FondoPortadas from './FondoPortadas.jsx';
 
 // ====================================
-// VALIDACIONES
+// VALIDACIONES EN CLIENTE
 // ====================================
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function validarRegistro(formData) {
-  const nombre = formData.nombre.trim();
-  const correo = formData.correo.trim().toLowerCase();
+  const nombre = (formData.nombre || '').trim();
+  const correo = (formData.correo || '').trim().toLowerCase();
 
   if (nombre.length < 2) {
     return 'El nombre debe tener al menos 2 caracteres.';
@@ -36,16 +33,6 @@ function validarRegistro(formData) {
 
   if (formData.password !== formData.confirmPassword) {
     return 'Las contraseñas no coinciden.';
-  }
-
-  // Comprobación simulada contra los usuarios iniciales.
-  const correoExistente = mockUsers.some(
-    (usuario) =>
-      usuario.correo.toLowerCase() === correo
-  );
-
-  if (correoExistente) {
-    return 'Este correo electrónico ya está registrado.';
   }
 
   return null;
@@ -100,7 +87,7 @@ export default function AuthForm({
     setError('');
     setSuccess('');
 
-    // REGISTRO SIMULADO
+    // REGISTRO REAL CON BACKEND
     if (isRegister) {
       const validationError = validarRegistro(formData);
 
@@ -109,18 +96,40 @@ export default function AuthForm({
         return;
       }
 
-      // No modifica users.json ni localStorage.
-      // Backend implementará el registro real.
-      setSuccess(
-        'Registro simulado correctamente. ' +
-        'La cuenta no se ha guardado. ' +
-        'Puedes regresar al inicio de sesión.'
-      );
+      setLoading(true);
+
+      try {
+        const result = await register(
+          formData.nombre,
+          formData.correo,
+          formData.password
+        );
+
+        setSuccess(
+          result.mensaje || '¡Cuenta registrada con éxito! Entrando a la plataforma...'
+        );
+
+        setTimeout(() => {
+          if (result.usuario) {
+            onLogin?.(result.usuario);
+          }
+          navigate('/catalogo');
+        }, 1200);
+
+      } catch (err) {
+        setError(
+          err instanceof Error
+            ? err.message
+            : 'Ocurrió un error al registrar la cuenta.'
+        );
+      } finally {
+        setLoading(false);
+      }
 
       return;
     }
 
-    // LOGIN SIMULADO
+    // LOGIN REAL CON BACKEND
     setLoading(true);
 
     try {
@@ -130,7 +139,6 @@ export default function AuthForm({
       );
 
       onLogin?.(result.usuario);
-
       navigate('/catalogo');
     } catch (err) {
       setError(
@@ -157,7 +165,7 @@ export default function AuthForm({
 
   return (
     <main className="auth-page">
-      <FondoPortadas />  
+      <FondoPortadas />
       <section
         className="auth-card"
         aria-labelledby="auth-title"
@@ -174,9 +182,7 @@ export default function AuthForm({
             id="auth-title"
             className="auth-card__title"
           >
-            {isRegister
-              ? 'Crear cuenta'
-              : 'Inicio de sesión'}
+            {isRegister ? 'Crear cuenta' : 'Inicio de sesión'}
           </h1>
 
           <form
@@ -242,14 +248,14 @@ export default function AuthForm({
               />
             )}
 
-            {/* AVISO DE ELIMINACIÓN SIMULADA */}
+            {/* AVISO */}
             {!isRegister && notice && (
-            <p
+              <p
                 className="auth-card__success"
                 role="status"
-            >
+              >
                 {notice}
-            </p>
+              </p>
             )}
 
             {/* ERROR */}
@@ -262,7 +268,7 @@ export default function AuthForm({
               </p>
             )}
 
-            {/* REGISTRO SIMULADO EXITOSO */}
+            {/* ÉXITO */}
             {success && (
               <p
                 className="auth-card__success"

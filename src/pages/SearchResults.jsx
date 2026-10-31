@@ -1,25 +1,18 @@
-
+import { useEffect, useState } from 'react';
 import {
   useNavigate,
   useSearchParams,
 } from 'react-router';
 
 import ContentGrid from '../components/catalog/ContentGrid.jsx';
-
 import {
+  getContents,
+  getGenres,
   getCatalogSnapshot,
 } from '../services/catalogService.js';
 
 import '../styles/SearchResults.css';
 
-// ====================================
-// DATOS DEL CATÁLOGO
-// ====================================
-
-const { contents, genres } = getCatalogSnapshot();
-
-// Normalizar textos para que las búsquedas
-// no dependan de mayúsculas ni acentos.
 function normalizeText(value) {
   return String(value ?? '')
     .normalize('NFD')
@@ -28,32 +21,36 @@ function normalizeText(value) {
     .trim();
 }
 
-// ====================================
-// PÁGINA DE RESULTADOS
-// ====================================
-
 export default function SearchResults() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
+  const initial = getCatalogSnapshot();
+  const [contents, setContents] = useState(initial.contents);
+  const [genres, setGenres] = useState(initial.genres);
+
+  useEffect(() => {
+    let active = true;
+    Promise.all([getContents(), getGenres()]).then(([apiContents, apiGenres]) => {
+      if (active) {
+        setContents(apiContents);
+        setGenres(apiGenres);
+      }
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
+
   const query = searchParams.get('q')?.trim() ?? '';
   const normalizedQuery = normalizeText(query);
-
-  // ====================================
-  // FILTRAR AUDIOVISUALES
-  // ====================================
 
   const results = normalizedQuery
     ? contents.filter((item) => {
         const genreNames = (item.generos ?? [])
-          .map((genreId) => {
-            if (typeof genreId === 'string') {
-              return genreId;
-            }
-
-            return genres.find(
-              (genre) => genre.id === genreId
-            )?.nombre ?? '';
+          .map((g) => {
+            if (typeof g === 'string') return g;
+            return genres.find((genre) => genre.id === g)?.nombre ?? '';
           })
           .join(' ');
 
@@ -65,26 +62,16 @@ export default function SearchResults() {
           genreNames,
         ].join(' ');
 
-        return normalizeText(searchableText)
-          .includes(normalizedQuery);
+        return normalizeText(searchableText).includes(normalizedQuery);
       })
     : [];
 
-  // ====================================
-  // ABRIR DETALLES POR ID
-  // ====================================
-
   function handleView(item) {
-    navigate(`/audiovisual/${item.id}`);
+    navigate(`/audiovisual/${item.id || item._id}`);
   }
-
-  // ====================================
-  // RENDERIZADO
-  // ====================================
 
   return (
     <div className="search-results">
-
       {/* ENCABEZADO */}
       <header className="search-results__header">
         <h1>
@@ -106,8 +93,7 @@ export default function SearchResults() {
       {/* SIN BÚSQUEDA */}
       {!query && (
         <p>
-          Escribe un término en el buscador
-          para encontrar audiovisuales.
+          Escribe un término en el buscador para encontrar audiovisuales.
         </p>
       )}
 
@@ -122,11 +108,9 @@ export default function SearchResults() {
       {/* SIN COINCIDENCIAS */}
       {query && results.length === 0 && (
         <p>
-          No se encontraron audiovisuales
-          que coincidan con "{query}".
+          No se encontraron audiovisuales que coincidan con "{query}".
         </p>
       )}
-
     </div>
   );
 }
