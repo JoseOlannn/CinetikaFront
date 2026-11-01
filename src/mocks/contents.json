@@ -1,4 +1,3 @@
-
 [
   {
     "id": 101,
@@ -9,8 +8,13 @@
     "banner": "/assets/banners/101.jpeg",
     "sinopsis": "En un futuro distópico, el ex policía Rick Deckard es llamado para rastrear y retirar a cuatro replicantes que han regresado a la Tierra.",
     "duracion": "117 min",
-    "generos": [1, 2, 10],
-    "calificacion": 4.8
+    "generos": [
+      1,
+      2,
+      10
+    ],
+    "calificacion": 4.8,
+    "visualizaciones": 84200
   },
   {
     "id": 102,
@@ -21,8 +25,12 @@
     "banner": "/assets/banners/102.avif",
     "sinopsis": "Un grupo de científicos funda un negocio dedicado a capturar fantasmas mientras una amenaza sobrenatural se aproxima a Nueva York.",
     "duracion": "105 min",
-    "generos": [4, 8],
-    "calificacion": 4.5
+    "generos": [
+      4,
+      8
+    ],
+    "calificacion": 4.5,
+    "visualizaciones": 45300
   },
   {
     "id": 103,
@@ -33,8 +41,13 @@
     "banner": "/assets/banners/103.jpeg",
     "sinopsis": "Marty McFly viaja accidentalmente a 1955 y debe conseguir que sus padres se enamoren para no alterar su propia existencia.",
     "duracion": "116 min",
-    "generos": [1, 4, 7],
-    "calificacion": 4.9
+    "generos": [
+      1,
+      4,
+      7
+    ],
+    "calificacion": 4.9,
+    "visualizaciones": 92300
   },
   {
     "id": 104,
@@ -45,8 +58,13 @@
     "banner": "/assets/banners/104.jpg",
     "sinopsis": "Un parque temático poblado por dinosaurios clonados se convierte en una pesadilla cuando falla su sistema de seguridad.",
     "duracion": "127 min",
-    "generos": [1, 2, 7],
-    "calificacion": 4.8
+    "generos": [
+      1,
+      2,
+      7
+    ],
+    "calificacion": 4.8,
+    "visualizaciones": 74800
   },
   {
     "id": 105,
@@ -57,8 +75,13 @@
     "banner": "/assets/banners/105.jpeg",
     "sinopsis": "Woody teme perder su lugar como juguete favorito de Andy cuando aparece Buzz Lightyear, un moderno juguete espacial.",
     "duracion": "81 min",
-    "generos": [6, 4, 7],
-    "calificacion": 4.7
+    "generos": [
+      6,
+      4,
+      7
+    ],
+    "calificacion": 4.7,
+    "visualizaciones": 65200
   },
   {
     "id": 106,
@@ -69,8 +92,13 @@
     "banner": "/assets/banners/106.webp",
     "sinopsis": "Un programador descubre que el mundo que conoce es una simulación creada por máquinas y se une a una rebelión para liberar a la humanidad.",
     "duracion": "136 min",
-    "generos": [1, 2, 10],
-    "calificacion": 4.9
+    "generos": [
+      1,
+      2,
+      10
+    ],
+    "calificacion": 4.9,
+    "visualizaciones": 98500
   },
   {
     "id": 201,
@@ -81,8 +109,12 @@
     "banner": "/assets/banners/201.webp",
     "sinopsis": "Una familia de Springfield protagoniza situaciones absurdas que satirizan la vida cotidiana, la cultura popular y la sociedad.",
     "duracion": "4 temporadas (81 episodios)",
-    "generos": [6, 4],
-    "calificacion": 4.8
+    "generos": [
+      6,
+      4
+    ],
+    "calificacion": 4.8,
+    "visualizaciones": 88700
   },
   {
     "id": 202,
@@ -93,8 +125,11 @@
     "banner": "/assets/banners/202.webp",
     "sinopsis": "Un comediante y sus amigos viven situaciones cómicas relacionadas con las pequeñas complicaciones de la vida diaria en Nueva York.",
     "duracion": "9 temporadas (180 episodios)",
-    "generos": [4],
-    "calificacion": 4.7
+    "generos": [
+      4
+    ],
+    "calificacion": 4.7,
+    "visualizaciones": 58400
   },
   {
     "id": 203,
@@ -105,8 +140,13 @@
     "banner": "/assets/banners/203.avif",
     "sinopsis": "El agente Dale Cooper llega a un pequeño pueblo para investigar el asesinato de Laura Palmer y descubre secretos inquietantes entre sus habitantes.",
     "duracion": "2 temporadas (30 episodios)",
-    "generos": [3, 9, 10],
-    "calificacion": 4.8
+    "generos": [
+      3,
+      9,
+      10
+    ],
+    "calificacion": 4.8,
+    "visualizaciones": 61700
   },
   {
     "id": 204,
@@ -117,8 +157,13 @@
     "banner": "/assets/banners/204.avif",
     "sinopsis": "Batman protege Ciudad Gótica de criminales y villanos mientras enfrenta conflictos que ponen a prueba su sentido de justicia.",
     "duracion": "4 temporadas (85 episodios)",
-    "generos": [6, 2, 9],
-    "calificacion": 4.9
+    "generos": [
+      6,
+      2,
+      9
+    ],
+    "calificacion": 4.9,
+    "visualizaciones": 79600
   },
   {
     "id": 205,
@@ -129,8 +174,13 @@
     "banner": "/assets/banners/205.webp",
     "sinopsis": "Los agentes Mulder y Scully investigan fenómenos inexplicables, conspiraciones y casos que desafían las explicaciones convencionales.",
     "duracion": "9 temporadas (202 episodios)",
-    "generos": [1, 9, 10],
-    "calificacion": 4.8
+    "generos": [
+      1,
+      9,
+      10
+    ],
+    "calificacion": 4.8,
+    "visualizaciones": 71300
   },
   {
     "id": 206,
@@ -141,8 +191,11 @@
     "banner": "/assets/banners/206.webp",
     "sinopsis": "Seis amigos comparten experiencias sentimentales, laborales y personales mientras construyen sus vidas en Nueva York.",
     "duracion": "10 temporadas (236 episodios)",
-    "generos": [4],
-    "calificacion": 4.7
+    "generos": [
+      4
+    ],
+    "calificacion": 4.7,
+    "visualizaciones": 68900
   },
   {
     "id": 301,
@@ -153,8 +206,12 @@
     "banner": "/assets/banners/301.jpg",
     "sinopsis": "Dos lámparas de escritorio cobran vida y juegan con una pelota en uno de los primeros cortometrajes animados de Pixar.",
     "duracion": "2 min",
-    "generos": [6, 4],
-    "calificacion": 4.5
+    "generos": [
+      6,
+      4
+    ],
+    "calificacion": 4.5,
+    "visualizaciones": 42100
   },
   {
     "id": 302,
@@ -165,8 +222,12 @@
     "banner": "/assets/banners/302.jpg",
     "sinopsis": "Un pequeño juguete musical intenta escapar de un bebé que desea jugar con él, descubriendo una inesperada responsabilidad.",
     "duracion": "5 min",
-    "generos": [6, 4],
-    "calificacion": 4.4
+    "generos": [
+      6,
+      4
+    ],
+    "calificacion": 4.4,
+    "visualizaciones": 35400
   },
   {
     "id": 303,
@@ -177,8 +238,12 @@
     "banner": "/assets/banners/303.webp",
     "sinopsis": "Un muñeco de nieve atrapado en una esfera de cristal intenta escapar para unirse a otros recuerdos de vacaciones.",
     "duracion": "4 min",
-    "generos": [6, 4],
-    "calificacion": 4.5
+    "generos": [
+      6,
+      4
+    ],
+    "calificacion": 4.5,
+    "visualizaciones": 38700
   },
   {
     "id": 304,
@@ -189,8 +254,13 @@
     "banner": "/assets/banners/304.jpg",
     "sinopsis": "Wallace y Gromit se ven involucrados en un extraño plan criminal después de recibir a un misterioso pingüino como inquilino.",
     "duracion": "30 min",
-    "generos": [6, 4, 9],
-    "calificacion": 4.8
+    "generos": [
+      6,
+      4,
+      9
+    ],
+    "calificacion": 4.8,
+    "visualizaciones": 55100
   },
   {
     "id": 305,
@@ -201,8 +271,13 @@
     "banner": "/assets/banners/305.jpg",
     "sinopsis": "Wallace y Gromit investigan la desaparición de ovejas mientras se enfrentan a un peligroso complot.",
     "duracion": "30 min",
-    "generos": [6, 4, 7],
-    "calificacion": 4.7
+    "generos": [
+      6,
+      4,
+      7
+    ],
+    "calificacion": 4.7,
+    "visualizaciones": 51900
   },
   {
     "id": 306,
@@ -213,7 +288,11 @@
     "banner": "/assets/banners/306.webp",
     "sinopsis": "Un anciano juega una partida de ajedrez contra sí mismo en un parque, interpretando a dos rivales de personalidades opuestas.",
     "duracion": "4 min",
-    "generos": [6, 4],
-    "calificacion": 4.7
+    "generos": [
+      6,
+      4
+    ],
+    "calificacion": 4.7,
+    "visualizaciones": 48600
   }
 ]

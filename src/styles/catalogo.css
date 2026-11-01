@@ -21,7 +21,7 @@
   max-width: 1440px;
 
   margin: 0 auto;
-  padding: 42px 5% 80px;
+  padding: 34px 5% 42px;
 }
 
 /* ====================================
@@ -188,4 +188,12 @@
     margin-bottom: 18px;
     font-size: 21px;
   }
+}
+
+.catalog-page__body:has(.most-viewed) {
+  padding-bottom: 0;
+}
+
+.catalog-page__body:has(.most-viewed) + .catalog-page__body {
+  padding-top: 16px;
 }
