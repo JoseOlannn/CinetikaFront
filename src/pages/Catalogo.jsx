@@ -1,5 +1,4 @@
-
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   useNavigate,
   useSearchParams,
@@ -11,6 +10,8 @@ import ContentGrid from '../components/catalog/ContentGrid.jsx';
 import MostViewedCarousel from '../components/catalog/MostViewedCarousel.jsx';
 
 import {
+  getContents,
+  getGenres,
   getCatalogSnapshot,
   filterByCategory,
   filterByGenre,
@@ -19,7 +20,7 @@ import {
   getMostViewed,
 } from '../services/catalogService.js';
 
-import '../styles/Catalogo.css';
+import '../styles/catalogo.css';
 
 // ====================================
 // CATEGORÍAS
@@ -37,9 +38,6 @@ const CATEGORY_TITLES = {
   cortometraje: 'Explora nuestros cortometrajes',
 };
 
-// Obtener datos a través del servicio mock.
-const { contents, genres } = getCatalogSnapshot();
-
 // ====================================
 // CATÁLOGO PRINCIPAL
 // ====================================
@@ -47,17 +45,12 @@ const { contents, genres } = getCatalogSnapshot();
 export default function Catalogo() {
   const [searchParams] = useSearchParams();
 
-  const requestedCategory =
-    searchParams.get('tipo');
+  const requestedCategory = searchParams.get('tipo');
 
-  const category = VALID_CATEGORIES.includes(
-    requestedCategory
-  )
+  const category = VALID_CATEGORIES.includes(requestedCategory)
     ? requestedCategory
     : null;
 
-  // Reinicia el género y el banner al cambiar
-  // de categoría, sin afectar otras páginas.
   return (
     <CatalogoContent
       key={category ?? 'general'}
@@ -73,59 +66,64 @@ export default function Catalogo() {
 function CatalogoContent({ category }) {
   const navigate = useNavigate();
 
-  const [selectedGenre, setSelectedGenre] =
-    useState(null);
+  const initial = getCatalogSnapshot();
+  const [contents, setContents] = useState(initial.contents);
+  const [genres, setGenres] = useState(initial.genres);
+  const [selectedGenre, setSelectedGenre] = useState(null);
+  const [featured, setFeatured] = useState([]);
 
-  // Audiovisuales de la categoría actual.
-  const categoryContents = filterByCategory(
-    contents,
-    category
-  );
+  // Cargar contenido desde la API del backend
+  useEffect(() => {
+    let activo = true;
 
-  // Selección aleatoria una vez por categoría.
-  // Cambiar el género NO modifica el banner.
-  const [featured] = useState(() =>
-    selectRandomBanner(categoryContents, 5)
-  );
+    Promise.all([getContents(), getGenres()])
+      .then(([apiContents, apiGenres]) => {
+        if (activo) {
+          setContents(apiContents);
+          setGenres(apiGenres);
 
-  // Mostrar únicamente géneros disponibles.
-  const availableGenres = getAvailableGenres(
-    categoryContents,
-    genres
-  );
+          const filtrados = filterByCategory(apiContents, category);
+          setFeatured(selectRandomBanner(filtrados, 5));
+        }
+      })
+      .catch((err) => {
+        console.error('Error al cargar catálogo:', err);
+      });
 
-  // Aplicar filtro de género a las tarjetas.
-  const filteredContents = filterByGenre(
-    categoryContents,
-    selectedGenre
-  );
+    return () => {
+      activo = false;
+    };
+  }, [category]);
+
+  // Audiovisuales de la categoría actual
+  const categoryContents = filterByCategory(contents, category);
+
+  // Inicializar banner si aún no está listo
+  const activeFeatured = featured.length > 0 ? featured : selectRandomBanner(categoryContents, 5);
+
+  // Géneros disponibles para este conjunto
+  const availableGenres = getAvailableGenres(categoryContents, genres);
+
+  // Aplicar filtro de género
+  const filteredContents = filterByGenre(categoryContents, selectedGenre);
 
   // Mostrar los contenidos más vistos
   const mostViewed = getMostViewed(contents, 10);
 
-  // Título adaptado a la categoría.
+  // Título
   const title = category
     ? CATEGORY_TITLES[category]
     : 'Explora nuestros audiovisuales';
 
-  // ====================================
-  // ABRIR DETALLES POR ID
-  // ====================================
-
   function handleView(item) {
-    navigate(`/audiovisual/${item.id}`);
+    navigate(`/audiovisual/${item.id || item._id}`);
   }
-
-  // ====================================
-  // RENDERIZADO
-  // ====================================
 
   return (
     <div className="catalog-page">
-
       {/* BANNER */}
       <FeaturedBanner
-        items={featured}
+        items={activeFeatured}
         onView={handleView}
       />
 
@@ -141,7 +139,6 @@ function CatalogoContent({ category }) {
 
       {/* CATÁLOGO */}
       <div className="catalog-page__body">
-
         {/* TÍTULO */}
         <h2 className="catalog-page__explore-title">
           {title}
@@ -159,7 +156,6 @@ function CatalogoContent({ category }) {
           items={filteredContents}
           onView={handleView}
         />
-
       </div>
     </div>
   );

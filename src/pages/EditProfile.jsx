@@ -1,4 +1,3 @@
-
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 import {
@@ -32,21 +31,18 @@ export default function EditProfile({
     usuario?.nombre ?? ''
   );
 
-  // Nunca se carga la contraseña actual.
   const [password, setPassword] = useState('');
   const [preview, setPreview] = useState(null);
 
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const [showDeleteConfirm, setShowDeleteConfirm] =
-    useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const avatarUrl =
     preview ||
     usuario?.foto_perfil ||
     DEFAULT_AVATAR;
 
-  // Evitar conservar URLs temporales de imágenes.
   useEffect(() => {
     return () => {
       if (preview) {
@@ -79,12 +75,18 @@ export default function EditProfile({
       return;
     }
 
-    setPreview(URL.createObjectURL(file));
+    // Convertir a DataURL Base64 para guardarlo en la base de datos
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setPreview(reader.result);
+    };
+    reader.readAsDataURL(file);
+
     event.target.value = '';
   }
 
   // ====================================
-  // GUARDAR (SIMULADO)
+  // GUARDAR
   // ====================================
 
   async function handleSubmit(event) {
@@ -94,71 +96,64 @@ export default function EditProfile({
     setSuccess('');
 
     if (!usuario) {
-        setError('Debes iniciar sesión para editar tu perfil.');
-        return;
+      setError('Debes iniciar sesión para editar tu perfil.');
+      return;
     }
 
     if (nombre.trim().length < 2) {
-        setError('El nombre debe tener al menos 2 caracteres.');
-        return;
+      setError('El nombre debe tener al menos 2 caracteres.');
+      return;
     }
 
     if (password && password.length < 8) {
-        setError(
-        'La nueva contraseña debe tener al menos 8 caracteres.'
-        );
-        return;
+      setError('La nueva contraseña debe tener al menos 8 caracteres.');
+      return;
     }
 
     try {
-        const result = await updateProfile({
-        id: usuario.id,
+      const payload = {
+        id: usuario.id || usuario._id,
         nombre: nombre.trim(),
-        correo: usuario.correo,
-        foto_perfil: usuario.foto_perfil,
-        });
+        foto_perfil: preview || usuario.foto_perfil || '',
+      };
 
-        setSuccess(result.message);
-    } catch {
-        setError('No se pudieron guardar los cambios.');
+      if (password) {
+        payload.password = password;
+      }
+
+      const result = await updateProfile(payload);
+      setSuccess(result.message || 'Cambios guardados correctamente.');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'No se pudieron guardar los cambios.');
     }
-    }
+  }
 
   // ====================================
-  // BORRAR CUENTA (SIMULADO)
+  // BORRAR CUENTA
   // ====================================
 
   async function handleDeleteAccount() {
     try {
-        const result = await deleteAccount();
+      const result = await deleteAccount(usuario.id || usuario._id);
 
-        if (!result.success) {
-        throw new Error('No se pudo eliminar la cuenta.');
-        }
+      setShowDeleteConfirm(false);
+      onLogout?.();
 
-        setShowDeleteConfirm(false);
-        onLogout?.();
-
-        navigate('/', {
+      navigate('/', {
         replace: true,
         state: {
-            notice: result.message,
+          notice: result.message,
         },
-        });
-    } catch {
-        setShowDeleteConfirm(false);
-        setError('No se pudo procesar la solicitud.');
+      });
+    } catch (err) {
+      setShowDeleteConfirm(false);
+      setError(err instanceof Error ? err.message : 'No se pudo procesar la solicitud.');
     }
-    }
-
-  // ====================================
-  // RENDERIZADO
-  // ====================================
+  }
 
   return (
     <div className="edit-profile-page">
       <section className="edit-profile">
-
         <h1 className="edit-profile__title">
           Editar perfil
         </h1>
@@ -182,13 +177,13 @@ export default function EditProfile({
               />
 
               <IconButton
-              icon="pencil"
-              size="sm"
-              className="edit-profile__avatar-edit"
-              aria-label="Cambiar fotografía de perfil"
-              title="Cambiar fotografía"
-              onClick={() => fileInputRef.current?.click()}
-            />
+                icon="pencil"
+                size="sm"
+                className="edit-profile__avatar-edit"
+                aria-label="Cambiar fotografía de perfil"
+                title="Cambiar fotografía"
+                onClick={() => fileInputRef.current?.click()}
+              />
             </div>
 
             <input
@@ -239,7 +234,7 @@ export default function EditProfile({
                 id="edit-email"
                 name="correo"
                 type="email"
-                value={usuario?.correo ?? ''}
+                value={usuario?.email || usuario?.correo || ''}
                 disabled
               />
             </div>
@@ -249,7 +244,7 @@ export default function EditProfile({
                 className="edit-profile__label"
                 htmlFor="edit-password"
               >
-                Contraseña
+                Nueva Contraseña
               </label>
 
               <Input
@@ -286,7 +281,7 @@ export default function EditProfile({
               </p>
             )}
 
-            {/* SOLO DOS BOTONES PRINCIPALES */}
+            {/* BOTONES */}
             <div className="edit-profile__actions">
               <Button
                 type="submit"
@@ -323,8 +318,7 @@ export default function EditProfile({
               </h2>
 
               <p id="delete-description">
-                Esta acción es una simulación.
-                No se eliminará ningún usuario ni sus datos.
+                ¿Estás seguro de que deseas eliminar tu cuenta permanentemente? Esta acción no se puede deshacer.
               </p>
 
               <div className="edit-profile__dialog-actions">

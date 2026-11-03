@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router';
 
@@ -19,6 +18,30 @@ const CATEGORY_LABELS = {
 
 const { genres } = getCatalogSnapshot();
 
+/**
+ * Convierte enlaces comunes (YouTube, Vimeo, etc.) a URLs reproducibles en un iframe.
+ */
+function getEmbedUrl(url) {
+  if (!url) return null;
+  const trimmed = url.trim();
+
+  // YouTube
+  const ytMatch = trimmed.match(
+    /(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/
+  );
+  if (ytMatch && ytMatch[1]) {
+    return `https://www.youtube-nocookie.com/embed/${ytMatch[1]}?autoplay=1&rel=0`;
+  }
+
+  // Vimeo
+  const vimeoMatch = trimmed.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+  if (vimeoMatch && vimeoMatch[1]) {
+    return `https://player.vimeo.com/video/${vimeoMatch[1]}?autoplay=1`;
+  }
+
+  return trimmed;
+}
+
 // ====================================
 // PÁGINA DE DETALLES
 // ====================================
@@ -33,9 +56,10 @@ function ContentDetailData({ id }) {
   const [content, setContent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState('');
+  const [playingVideo, setPlayingVideo] = useState(false);
   const navigate = useNavigate();
 
-  // Buscar el audiovisual utilizando el ID de la URL.
+  // Buscar el audiovisual utilizando el ID de la URL
   useEffect(() => {
     let active = true;
 
@@ -57,6 +81,15 @@ function ContentDetailData({ id }) {
       active = false;
     };
   }, [id]);
+
+  function handlePlay() {
+    if (!content?.videoUrl) {
+      setMessage('Este contenido aún no tiene un video o tráiler asignado.');
+      return;
+    }
+    setMessage('');
+    setPlayingVideo(true);
+  }
 
   if (loading) {
     return (
@@ -82,27 +115,21 @@ function ContentDetailData({ id }) {
     );
   }
 
-  // Traducir IDs a nombres de géneros.
-  // También acepta nombres si la API los devuelve así.
-  const genreNames = (content.generos ?? []).map(
-    (genreId) => {
-      if (typeof genreId === 'string') {
-        return genreId;
-      }
-
-      const genre = genres.find(
-        (item) => item.id === genreId
-      );
-
-      return genre?.nombre ?? `Género ${genreId}`;
+  // Traducir IDs a nombres de géneros
+  const genreNames = (content.generos ?? []).map((genreId) => {
+    if (typeof genreId === 'string') {
+      return genreId;
     }
-  );
+    const genre = genres.find((item) => item.id === genreId);
+    return genre?.nombre ?? `Género ${genreId}`;
+  });
+
+  const embedUrl = getEmbedUrl(content.videoUrl);
+  const isDirectVideo = content.videoUrl && /\.(mp4|webm|ogg)$/i.test(content.videoUrl);
 
   return (
     <main className="content-detail">
-
       <section className="content-detail__information">
-
         {/* IMÁGENES */}
         <div className="content-detail__images">
           {content.banner && (
@@ -132,8 +159,7 @@ function ContentDetailData({ id }) {
         <div className="content-detail__data">
           <p>
             <strong>Categoría:</strong>{' '}
-            {CATEGORY_LABELS[content.categoria] ??
-              content.categoria}
+            {CATEGORY_LABELS[content.categoria] ?? content.categoria}
           </p>
 
           <h2>{content.nombre}</h2>
@@ -142,13 +168,15 @@ function ContentDetailData({ id }) {
             <strong>Año:</strong> {content.anio}
           </p>
 
-          <p>
-            <strong>Duración:</strong> {content.duracion}
-          </p>
+          {content.duracion && (
+            <p>
+              <strong>Duración:</strong> {content.duracion}
+            </p>
+          )}
 
           <p>
             <strong>Calificación:</strong>{' '}
-            {content.calificacion}/5
+            {content.calificacion ? `${content.calificacion}/5` : 'Sin calificar'}
           </p>
 
           <p>
@@ -160,14 +188,12 @@ function ContentDetailData({ id }) {
             <strong>Sinopsis:</strong> {content.sinopsis}
           </p>
 
-          {/* ACCIONES PROVISIONALES */}
+          {/* ACCIONES */}
           <div className="content-detail__actions">
             <Button
               variant="primary"
               icon="play"
-              onClick={() => setMessage(
-                'Reproducción pendiente de integración.'
-              )}
+              onClick={handlePlay}
             >
               Ver
             </Button>
@@ -175,19 +201,17 @@ function ContentDetailData({ id }) {
             <Button
               variant="outline"
               icon="eye"
-              onClick={() => setMessage(
-                'Tráiler pendiente de integración.'
-              )}
+              onClick={handlePlay}
             >
               Ver tráiler
             </Button>
 
             <Button
-                variant="secondary"
-                size="md"
-                onClick={() => navigate(-1)}
+              variant="secondary"
+              size="md"
+              onClick={() => navigate(-1)}
             >
-                Volver
+              Volver
             </Button>
           </div>
 
@@ -198,6 +222,57 @@ function ContentDetailData({ id }) {
           )}
         </div>
       </section>
+
+      {/* MODAL REPRODUCTOR DE VIDEO */}
+      {playingVideo && embedUrl && (
+        <div
+          className="content-detail__player-overlay"
+          onClick={() => setPlayingVideo(false)}
+        >
+          <div
+            className="content-detail__player-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="content-detail__player-header">
+              <h3>Reproduciendo: {content.nombre}</h3>
+              <div className="content-detail__player-actions">
+                <a
+                  href={content.videoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="content-detail__player-link"
+                >
+                  Abrir enlace externo ↗
+                </a>
+                <button
+                  type="button"
+                  className="content-detail__player-close"
+                  onClick={() => setPlayingVideo(false)}
+                >
+                  ✕ Cerrar
+                </button>
+              </div>
+            </div>
+
+            <div className="content-detail__player-frame-wrapper">
+              {isDirectVideo ? (
+                <video
+                  src={content.videoUrl}
+                  controls
+                  autoPlay
+                />
+              ) : (
+                <iframe
+                  src={embedUrl}
+                  title={`Reproductor de ${content.nombre}`}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                />
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

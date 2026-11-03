@@ -1,4 +1,3 @@
-
 import { useEffect, useRef, useState } from 'react';
 import {
   NavLink,
@@ -38,13 +37,6 @@ const navigation = [
 
 const DEFAULT_AVATAR = '/images/default-avatar.png';
 
-// ====================================
-// NAVBAR PRINCIPAL
-// ====================================
-
-// La key reinicia los estados internos al cambiar la ruta.
-// Así evitamos usar setState directamente dentro de un useEffect.
-
 export default function Navbar({
   usuario = null,
   onLogout,
@@ -60,20 +52,14 @@ export default function Navbar({
   );
 }
 
-// ====================================
-// CONTENIDO DEL NAVBAR
-// ====================================
-
 function NavbarContent({ usuario, onLogout }) {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Estados de los menús
   const [mobileOpen, setMobileOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
 
-  // Texto del buscador
   const [search, setSearch] = useState(() => {
     if (location.pathname !== '/buscar') {
       return '';
@@ -84,45 +70,30 @@ function NavbarContent({ usuario, onLogout }) {
     );
   });
 
-  // Referencias para cerrar menús al hacer clic fuera
   const navbarRef = useRef(null);
   const profileRef = useRef(null);
 
-  // Tipo de audiovisual seleccionado
   const tipoActual = new URLSearchParams(
     location.search
   ).get('tipo');
 
-  // Avatar del usuario
   const avatarUrl =
     usuario?.foto_perfil || DEFAULT_AVATAR;
 
-  // ====================================
-  // DETECTAR ENLACE ACTIVO
-  // ====================================
-
   function isSelected(item) {
-    // En búsqueda no se selecciona ninguna categoría
     if (location.pathname !== '/catalogo') {
       return false;
     }
 
-    // Inicio muestra todos los audiovisuales
     if (item.tipo === null) {
       return tipoActual === null;
     }
 
-    // Las otras opciones dependen del tipo
     return tipoActual === item.tipo;
   }
 
-  // ====================================
-  // CERRAR MENÚS
-  // ====================================
-
   useEffect(() => {
     function handlePointerDown(event) {
-      // Cerrar perfil al hacer clic fuera
       if (
         profileRef.current &&
         !profileRef.current.contains(event.target)
@@ -130,7 +101,6 @@ function NavbarContent({ usuario, onLogout }) {
         setProfileOpen(false);
       }
 
-      // Cerrar navegación y búsqueda al hacer clic fuera
       if (
         navbarRef.current &&
         !navbarRef.current.contains(event.target)
@@ -148,38 +118,19 @@ function NavbarContent({ usuario, onLogout }) {
       }
     }
 
-    document.addEventListener(
-      'pointerdown',
-      handlePointerDown
-    );
-
-    document.addEventListener(
-      'keydown',
-      handleKeyDown
-    );
+    document.addEventListener('pointerdown', handlePointerDown);
+    document.addEventListener('keydown', handleKeyDown);
 
     return () => {
-      document.removeEventListener(
-        'pointerdown',
-        handlePointerDown
-      );
-
-      document.removeEventListener(
-        'keydown',
-        handleKeyDown
-      );
+      document.removeEventListener('pointerdown', handlePointerDown);
+      document.removeEventListener('keydown', handleKeyDown);
     };
   }, []);
-
-  // ====================================
-  // BÚSQUEDA
-  // ====================================
 
   function handleSearch(event) {
     event.preventDefault();
 
     const query = search.trim();
-
     if (!query) return;
 
     const params = new URLSearchParams({
@@ -193,30 +144,17 @@ function NavbarContent({ usuario, onLogout }) {
     setSearchOpen(false);
   }
 
-  // ====================================
-  // CERRAR SESIÓN SIMULADA
-  // ====================================
-
   function handleLogout() {
-    // Limpia el usuario guardado en App.jsx
     onLogout?.();
-
     setProfileOpen(false);
     setMobileOpen(false);
     setSearchOpen(false);
-
-    // Regresar al Login
     navigate('/');
   }
-
-  // ====================================
-  // RENDERIZADO
-  // ====================================
 
   return (
     <header className="navbar" ref={navbarRef}>
       <div className="navbar__container">
-
         {/* MENÚ HAMBURGUESA */}
         <button
           type="button"
@@ -249,24 +187,17 @@ function NavbarContent({ usuario, onLogout }) {
           />
         </NavLink>
 
-        {/* BUSCADOR GLOBAL */}
+        {/* BUSCADOR DESKTOP */}
         <form
-          id="navbar-search"
-          className={`navbar__search ${
-            searchOpen ? 'navbar__search--open' : ''
-          }`}
+          className="navbar__search navbar__search--desktop"
           role="search"
           onSubmit={handleSearch}
         >
           <Input
             type="search"
-            name="search"
-            placeholder="Buscar"
-            aria-label="Buscar películas, series o cortometrajes"
+            placeholder="Buscar películas, series..."
             value={search}
-            onChange={(event) =>
-              setSearch(event.target.value)
-            }
+            onChange={(e) => setSearch(e.target.value)}
             clearable
           />
         </form>
@@ -297,7 +228,6 @@ function NavbarContent({ usuario, onLogout }) {
 
         {/* ACCIONES DERECHAS */}
         <div className="navbar__actions">
-
           {/* LUPA PARA CELULARES */}
           <button
             type="button"
@@ -390,7 +320,15 @@ function NavbarContent({ usuario, onLogout }) {
                 id="navbar-profile-menu"
                 className="navbar__profile-menu"
               >
-                {/*Editar perfil */}
+                {usuario && (
+                  <div style={{ padding: '8px 12px', borderBottom: '1px solid rgba(0,0,0,0.1)' }}>
+                    <p style={{ margin: 0, fontWeight: 'bold', fontSize: '13px' }}>
+                      {usuario.nombre}
+                    </p>
+                  </div>
+                )}
+
+                {/* Editar perfil */}
                 <button
                   type="button"
                   className="navbar__profile-option"
@@ -413,7 +351,6 @@ function NavbarContent({ usuario, onLogout }) {
               </div>
             )}
           </div>
-
         </div>
       </div>
     </header>
