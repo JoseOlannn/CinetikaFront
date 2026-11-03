@@ -141,3 +141,12 @@ export async function getContentById(id) {
 
   return found ? normalizarItem(found) : null;
 }
+
+// Función para ordenar los contenidos por visualizaciones y mostrar los 10 más vistos
+export function getMostViewed(contents, count = 10) {
+  return [...contents]
+    .sort(
+      (a, b) => b.visualizaciones - a.visualizaciones
+    )
+    .slice(0, count);
+}
