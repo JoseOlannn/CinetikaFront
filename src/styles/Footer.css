@@ -1,0 +1,86 @@
+.footer {
+  display: flex;
+  flex-direction: column;   
+  align-items: center;      
+  gap: 40px;
+  padding: 50px 120px 30px;
+  background-color: #0B132B;
+  color: #fff;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+
+.diseno-accion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  padding: 8px;
+  margin: 10px;
+  width: 100%;
+}
+
+.diseno-accion h2 {
+  max-width: 700px;
+  font-size: 1.1rem;
+  line-height: 1.4;
+}
+
+.btn-comenzar {
+  padding: 10px 24px;
+  background-color: #d62828;
+  color: #fff;
+  font-weight: 700;
+  border: none;
+  border-bottom: 4px solid #F4A226;  
+  cursor: pointer;
+}
+
+
+.diseno-links {
+  display: flex;
+  justify-content: flex-start;  
+  gap: 120px;
+  width: 100%;
+}
+
+.diseno-link {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.diseno-link a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.diseno-link a:hover {
+  text-decoration: underline;
+}
+
+
+.redes {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.redes img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;     
+  object-fit: cover;
+}
+
+
+.copyright {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-align: center;
+}
