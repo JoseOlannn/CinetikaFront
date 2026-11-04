@@ -1,10 +1,12 @@
 import { api } from './api.js';
-import mockContents from '../mocks/contents.json';
-import mockGenres from '../mocks/genres.json';
+
+
+//import mockContents from '../mocks/contents.json'; 
+//import mockGenres from '../mocks/genres.json'; 
 
 // Cache en memoria para acceso sincrónico y rápido
-let cachedContents = [...mockContents];
-let cachedGenres = [...mockGenres];
+let cachedContents = [];
+let cachedGenres = [];
 
 function normalizarItem(item) {
   if (!item) return null;
