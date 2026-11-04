@@ -7,6 +7,7 @@ import {
 import FeaturedBanner from '../components/catalog/FeaturedBanner.jsx';
 import GenreFilter from '../components/catalog/GenreFilter.jsx';
 import ContentGrid from '../components/catalog/ContentGrid.jsx';
+import MostViewedCarousel from '../components/catalog/MostViewedCarousel.jsx';
 
 import {
   getContents,
@@ -16,9 +17,10 @@ import {
   filterByGenre,
   getAvailableGenres,
   selectRandomBanner,
+  getMostViewed,
 } from '../services/catalogService.js';
 
-import '../styles/Catalogo.css';
+import '../styles/catalogo.css';
 
 // ====================================
 // CATEGORÍAS
@@ -105,6 +107,9 @@ function CatalogoContent({ category }) {
   // Aplicar filtro de género
   const filteredContents = filterByGenre(categoryContents, selectedGenre);
 
+  // Mostrar los contenidos más vistos
+  const mostViewed = getMostViewed(contents, 10);
+
   // Título
   const title = category
     ? CATEGORY_TITLES[category]
@@ -122,7 +127,17 @@ function CatalogoContent({ category }) {
         onView={handleView}
       />
 
-      {/* SECCIÓN INFERIOR */}
+      {/* CONTENIDO MÁS VISTO */}
+      {!category && (
+        <div className="catalog-page__body">
+          <MostViewedCarousel
+            items={mostViewed}
+            onView={handleView}
+          />
+        </div>
+      )}
+
+      {/* CATÁLOGO */}
       <div className="catalog-page__body">
         {/* TÍTULO */}
         <h2 className="catalog-page__explore-title">
