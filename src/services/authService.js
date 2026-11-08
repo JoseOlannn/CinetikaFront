@@ -45,13 +45,14 @@ export async function login(emailOrCorreo, password) {
 /**
  * Registrar un nuevo usuario con la API del backend.
  */
-export async function register(nombre, emailOrCorreo, password) {
+export async function register(nombre, emailOrCorreo, password, confirmarPassword) {
   const email = (emailOrCorreo || '').trim().toLowerCase();
 
   const data = await api.post('/auth/register', {
     nombre: (nombre || '').trim(),
     email,
     password,
+    confirmarPassword: confirmarPassword || password,
   });
 
   if (data?.token) {

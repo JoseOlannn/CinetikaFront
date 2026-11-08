@@ -102,7 +102,8 @@ export default function AuthForm({
         const result = await register(
           formData.nombre,
           formData.correo,
-          formData.password
+          formData.password,
+          formData.confirmPassword
         );
 
         setSuccess(

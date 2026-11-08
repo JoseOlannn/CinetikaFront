@@ -30,7 +30,9 @@ function getEmbedUrl(url) {
     /(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/
   );
   if (ytMatch && ytMatch[1]) {
-    return `https://www.youtube-nocookie.com/embed/${ytMatch[1]}?autoplay=1&rel=0`;
+    const origin = typeof window !== 'undefined' ? window.location.origin : '';
+    const originParam = origin ? `&origin=${encodeURIComponent(origin)}` : '';
+    return `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1&rel=0${originParam}`;
   }
 
   // Vimeo

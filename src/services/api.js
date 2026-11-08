@@ -35,10 +35,9 @@ async function request(endpoint, options = {}) {
 
     if (!response.ok) {
       const errorMsg =
-        data?.mensaje ||
-        (Array.isArray(data?.errores)
-          ? data.errores.map((e) => e.mensaje).join(', ')
-          : null) ||
+        (Array.isArray(data?.errores) && data.errores.length > 0
+          ? data.errores.map((e) => e.mensaje).join('. ')
+          : data?.mensaje) ||
         `Error HTTP ${response.status}: ${response.statusText}`;
 
       const error = new Error(errorMsg);
