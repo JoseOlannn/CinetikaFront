@@ -1,16 +1,23 @@
 
 /* ====================================
    CONTENT CARD - CINETIKA
-   COMPONENTE PROVISIONAL
+   DISEÑO RETRO / BAUHAUS
 ==================================== */
 
 .content-card {
   min-width: 0;
+  width: 100%;
 
-  background: var(--color-surface);
+  background: transparent;
   color: var(--color-text-primary);
 
   font-family: var(--font-primary);
+
+  transition: transform 0.2s ease;
+}
+
+.content-card:hover {
+  transform: translateY(-4px);
 }
 
 /* ====================================
@@ -24,7 +31,11 @@
   aspect-ratio: 2 / 3;
 
   overflow: hidden;
+
   background: var(--color-background);
+
+  border: 2px solid var(--color-secondary);
+  box-sizing: border-box;
 }
 
 .content-card__poster img {
@@ -34,9 +45,17 @@
   height: 100%;
 
   object-fit: cover;
+
+  transition: transform 0.25s ease;
 }
 
-/* Imagen no disponible */
+.content-card:hover .content-card__poster img {
+  transform: scale(1.04);
+}
+
+/* ====================================
+   IMAGEN NO DISPONIBLE
+==================================== */
 
 .content-card__fallback {
   width: 100%;
@@ -46,23 +65,78 @@
   align-items: center;
   justify-content: center;
 
+  background: var(--color-surface);
   color: var(--color-text-secondary);
+
   font-size: 12px;
 }
 
 /* ====================================
-   BOTÓN VER
+   DECORACIONES GEOMÉTRICAS
+   INSPIRADAS EN LA PRIMERA REFERENCIA
+==================================== */
+
+.content-card__decoration {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+
+  pointer-events: none;
+}
+
+/* Línea roja superior */
+
+.content-card__line-red {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 48%;
+  height: 5px;
+
+  background: var(--color-primary);
+}
+
+/* Línea azul vertical lateral */
+
+.content-card__line-blue {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 4px;
+  height: 45%;
+
+  background: var(--color-secondary);
+}
+
+/* Línea amarilla inferior */
+
+.content-card__line-yellow {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+
+  width: 34%;
+  height: 4px;
+
+  background: var(--color-accent);
+}
+
+/* ====================================
+   OVERLAY Y BOTÓN DE DETALLES
 ==================================== */
 
 .content-card__overlay {
   position: absolute;
   inset: 0;
+  z-index: 3;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  background: rgba(5, 7, 13, 0.6);
+  background: rgba(5, 7, 13, 0.65);
 
   opacity: 0;
   pointer-events: none;
@@ -77,22 +151,104 @@
 }
 
 /* ====================================
-   INFORMACIÓN BÁSICA
+   INFORMACIÓN INFERIOR
+   INSPIRADA EN LA SEGUNDA REFERENCIA
 ==================================== */
 
 .content-card__info {
-  padding: 10px;
+  padding: 10px 4px 8px;
 }
 
-.content-card__info p {
-  margin: 0 0 5px;
+/* Nombre del audiovisual */
+
+.content-card__title {
+  margin: 0 0 7px;
+
+  color: var(--color-text-primary);
+
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.3;
+
+  display: -webkit-box;
+
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+
+  overflow: hidden;
+}
+
+/* ====================================
+   METADATOS
+==================================== */
+
+.content-card__metadata {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  gap: 4px 8px;
+
+  color: var(--color-text-secondary);
 
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 1.4;
 }
 
-.content-card__info strong {
+.content-card__category {
+  color: var(--color-text-secondary);
+}
+
+.content-card__year {
+  color: var(--color-text-secondary);
+}
+
+.content-card__duration {
+  color: var(--color-accent);
   font-weight: 600;
+}
+
+/* Separadores */
+
+.content-card__year::before,
+.content-card__duration::before {
+  content: '·';
+
+  margin-right: 8px;
+
+  color: var(--color-text-secondary);
+}
+
+/* ====================================
+   CALIFICACIÓN
+==================================== */
+
+.content-card__rating {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 5px;
+  min-height: 20px;
+
+  margin-top: 6px;
+
+  color: #FFFFFF;
+
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.content-card__star {
+  color: var(--color-accent);
+  font-size: 15px;
+}
+
+.content-card__unrated {
+  color: var(--color-text-secondary);
+  font-size: 11px;
+  font-weight: 400;
 }
 
 /* ====================================
@@ -100,18 +256,82 @@
 ==================================== */
 
 @media (hover: none) {
+  .content-card:hover {
+    transform: none;
+  }
+
   .content-card__overlay {
     opacity: 1;
     pointer-events: auto;
 
     align-items: flex-end;
-    padding-bottom: 15px;
+    padding-bottom: 12px;
 
-    background: rgba(5, 7, 13, 0.25);
+    background: linear-gradient(
+      to top,
+      rgba(5, 7, 13, 0.65),
+      transparent 45%
+    );
   }
 }
 
+/* ====================================
+   TABLET
+==================================== */
+
+@media (max-width: 768px) {
+  .content-card__title {
+    font-size: 14px;
+  }
+
+  .content-card__metadata {
+    font-size: 11px;
+  }
+
+  .content-card__rating {
+    font-size: 12px;
+  }
+}
+
+/* ====================================
+   CELULARES
+==================================== */
+
+@media (max-width: 480px) {
+  .content-card__info {
+    padding: 8px 3px 6px;
+  }
+
+  .content-card__title {
+    font-size: 13px;
+  }
+
+  .content-card__metadata {
+    gap: 3px 6px;
+    font-size: 10px;
+  }
+
+  .content-card__year::before,
+  .content-card__duration::before {
+    margin-right: 6px;
+  }
+
+  .content-card__rating {
+    font-size: 11px;
+  }
+
+  .content-card__line-red {
+    height: 4px;
+  }
+}
+
+/* ====================================
+   REDUCIR MOVIMIENTO
+==================================== */
+
 @media (prefers-reduced-motion: reduce) {
+  .content-card,
+  .content-card__poster img,
   .content-card__overlay {
     transition: none;
   }

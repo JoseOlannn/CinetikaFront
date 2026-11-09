@@ -1,175 +1,392 @@
+
+/* ==========================================================================
+   CINETIKA - MOST VIEWED CAROUSEL
+   TOP 10 RETRO / BAUHAUS
+
+   Rojo:    #D62828
+   Azul:    #1A659E
+   Amarillo:#F4A226
+   Fondo:   #0B132B
+========================================================================== */
+
+
+/* ====================================
+   CONTENEDOR PRINCIPAL
+==================================== */
+
 .most-viewed {
   width: 100%;
-  padding: 0;
+  min-width: 0;
+
   margin: 0;
+  padding: 0;
+
   overflow: hidden;
+
+  font-family: var(--font-primary);
 }
+
+
+/* ====================================
+   ENCABEZADO
+==================================== */
 
 .most-viewed__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+
   margin-bottom: 0.75rem;
 }
 
 .most-viewed__title {
-  padding-top: 1.75rem;
   margin: 0;
-  color: #ffffff;
+  padding-top: 1.75rem;
+
+  color: var(--color-text-primary, #FFFFFF);
+
   font-size: clamp(1.5rem, 3vw, 2rem);
   font-weight: 800;
 }
 
 .most-viewed__subtitle {
   margin: 0.5rem 0 0;
-  color: #a1a6aa;
+
+  color: #A1A6AA;
   font-size: 0.95rem;
 }
 
 .most-viewed__notice {
   margin: 0 0 1.5rem;
-  color: #a1a6aa;
+
+  color: #A1A6AA;
   font-size: 0.75rem;
 }
 
-.most-viewed__controls {
-  display: flex;
-  gap: 0.5rem;
-  flex-shrink: 0;
-}
 
-.most-viewed__arrow {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  border: 1px solid #344258;
-  border-radius: 50%;
-  background-color: #172236;
-  color: #ffffff;
-  font-size: 2rem;
-  line-height: 1;
-  cursor: pointer;
-  transition:
-    background-color 0.2s ease,
-    border-color 0.2s ease;
-}
-
-.most-viewed__arrow:hover {
-  background-color: #0a3a66;
-  border-color: #0a3a66;
-}
-
-.most-viewed__arrow:focus-visible,
-.most-viewed__poster-button:focus-visible {
-  outline: 3px solid #f2c94c;
-  outline-offset: 3px;
-}
+/* ====================================
+   CARRUSEL HORIZONTAL
+==================================== */
 
 .most-viewed__track {
   display: flex;
+  align-items: stretch;
+
+  width: 100%;
   gap: 1.5rem;
+
   overflow-x: auto;
-  padding: 0.75rem 0.25rem 0.5rem;
-  margin-bottom: 0;
+  overflow-y: hidden;
+
+  padding: 0.75rem 0.25rem 1rem;
+
   scroll-behavior: smooth;
-  scroll-snap-type: x mandatory;
+  scroll-snap-type: x proximity;
+  overscroll-behavior-x: contain;
+
+  -webkit-overflow-scrolling: touch;
+
+  /* Firefox y navegadores con scrollbar-color */
   scrollbar-width: thin;
-  scrollbar-color: #344258 transparent;
+  scrollbar-color: #1A659E #141E3C;
 }
+
+.most-viewed__track:focus-visible {
+  outline: 2px solid var(--color-accent, #F4A226);
+  outline-offset: -2px;
+}
+
+
+/* ====================================
+   SCROLLBAR NATIVO PERSONALIZADO
+
+   Sencillo y acorde a Cinetika.
+   No se añade ningún control adicional.
+==================================== */
+
+/* Chrome / Edge / Safari */
+
+.most-viewed__track::-webkit-scrollbar {
+  height: 8px;
+}
+
+.most-viewed__track::-webkit-scrollbar-track {
+  background: #141E3C;
+  border-radius: 10px;
+}
+
+.most-viewed__track::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    90deg,
+    #D62828 0%,
+    #1A659E 55%,
+    #F4A226 100%
+  );
+
+  border-radius: 10px;
+  border: 1px solid #141E3C;
+}
+
+.most-viewed__track::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    90deg,
+    #D62828 0%,
+    #1A659E 45%,
+    #F4A226 100%
+  );
+}
+
+/*
+ * Chrome y Edge modernos pueden priorizar
+ * scrollbar-color sobre ::-webkit-scrollbar-thumb.
+ * Se restablece auto para que apliquen el degradado.
+ */
+
+@supports selector(::-webkit-scrollbar) {
+  .most-viewed__track {
+    scrollbar-color: auto;
+  }
+}
+
+
+/* ====================================
+   ELEMENTOS DEL TOP 10
+==================================== */
 
 .most-viewed__item {
+  position: relative;
+
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  flex: 0 0 230px;
+
+  flex: 0 0 330px;
   min-width: 0;
+
   scroll-snap-align: start;
+
+  transition: transform 0.2s ease;
 }
 
+.most-viewed__item:hover {
+  transform: translateY(-4px);
+}
+
+
+/* ====================================
+   NÚMEROS DEL RANKING
+==================================== */
+
 .most-viewed__rank {
+  position: relative;
+  z-index: 0;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  flex: 0 0 72px;
-  color: #f2c94c;
-  font-size: clamp(3rem, 5vw, 4.5rem);
+
+  flex: 0 0 85px;
+  margin-right: -10px;
+
+  font-size: 110px;
   font-weight: 900;
-  line-height: 1;
   letter-spacing: -0.08em;
-  text-align: center;
-  text-shadow: 2px 2px 0 #0a3a66;
+  line-height: 1;
+
+  white-space: nowrap;
+  user-select: none;
 }
 
-.most-viewed__content {
-  flex: 1;
-  min-width: 0;
+/* Alternar rojo, azul y amarillo */
+
+.most-viewed__item:nth-child(3n + 1)
+.most-viewed__rank {
+  color: var(--color-primary, #D62828);
 }
+
+.most-viewed__item:nth-child(3n + 2)
+.most-viewed__rank {
+  color: var(--color-secondary, #1A659E);
+}
+
+.most-viewed__item:nth-child(3n + 3)
+.most-viewed__rank {
+  color: var(--color-accent, #F4A226);
+}
+
+
+/* ====================================
+   PÓSTER
+==================================== */
 
 .most-viewed__poster-wrapper {
-    position: relative;
-    width: 100%;
-    overflow: hidden;
-    border-radius: 0.5rem;
-    background-color: #172236;
+  position: relative;
+  z-index: 1;
+
+  flex: 1;
+  min-width: 0;
+
+  overflow: hidden;
+
+  background: var(--color-surface, #141E3C);
+
+  border: 2px solid var(--color-secondary, #1A659E);
+  border-radius: 0;
+
+  box-sizing: border-box;
 }
 
 .most-viewed__poster {
-    display: block;
-    width: 100%;
-    aspect-ratio: 2 / 3;
-    object-fit: cover;
+  display: block;
+
+  width: 100%;
+  aspect-ratio: 2 / 3;
+
+  object-fit: cover;
+
+  transition: transform 0.25s ease;
 }
 
+.most-viewed__item:hover .most-viewed__poster {
+  transform: scale(1.035);
+}
+
+
+/* ====================================
+   PÓSTER NO DISPONIBLE
+==================================== */
+
+.most-viewed__fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  aspect-ratio: 2 / 3;
+
+  background: var(--color-surface, #141E3C);
+  color: var(--color-text-secondary, #64748B);
+
+  font-size: 13px;
+  text-align: center;
+}
+
+
+/* ====================================
+   DECORACIONES CINETIKA
+==================================== */
+
+.most-viewed__decoration {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+
+  pointer-events: none;
+}
+
+/* Franja roja superior */
+
+.most-viewed__line-red {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 48%;
+  height: 6px;
+
+  background: var(--color-primary, #D62828);
+}
+
+/* Franja azul superior */
+
+.most-viewed__line-blue {
+  position: absolute;
+  top: 0;
+  left: 48%;
+
+  width: 52%;
+  height: 6px;
+
+  background: var(--color-secondary, #1A659E);
+}
+
+/* Franja amarilla inferior */
+
+.most-viewed__line-yellow {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+
+  width: 42%;
+  height: 6px;
+
+  background: var(--color-accent, #F4A226);
+}
+
+
+/* ====================================
+   BOTÓN DETALLES EN HOVER
+==================================== */
+
 .most-viewed__overlay {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: rgba(0, 0, 0, 0.65);
-    opacity: 0;
-    transition: opacity 0.25s ease;
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(5, 7, 13, 0.65);
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  transition:
+    opacity 0.2s ease,
+    visibility 0.2s ease;
 }
 
 .most-viewed__poster-wrapper:hover .most-viewed__overlay,
 .most-viewed__poster-wrapper:focus-within .most-viewed__overlay {
-    opacity: 1;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
 }
 
-.most-viewed__name {
-  margin: 0.65rem 0 0;
-  color: #ffffff;
-  font-size: 0.9rem;
-  font-weight: 600;
-  line-height: 1.4;
-}
 
-/* Tabletas */
+/* ====================================
+   TABLET
+==================================== */
+
 @media (max-width: 800px) {
-  .most-viewed__item {
-    flex-basis: 205px;
-  }
-
-  .most-viewed__rank {
-    flex-basis: 60px;
-    font-size: 3.5rem;
-  }
-
   .most-viewed__track {
     gap: 1rem;
   }
+
+  .most-viewed__item {
+    flex-basis: 285px;
+  }
+
+  .most-viewed__rank {
+    flex-basis: 72px;
+    margin-right: -8px;
+    font-size: 90px;
+  }
 }
 
-/* Móviles */
+
+/* ====================================
+   MÓVILES
+==================================== */
+
 @media (max-width: 520px) {
   .most-viewed {
-    padding: 1.5rem 0;
+    padding: 1rem 0;
   }
 
   .most-viewed__title {
+    padding-top: 0.5rem;
     font-size: 1.4rem;
   }
 
@@ -177,27 +394,93 @@
     font-size: 0.8rem;
   }
 
+  .most-viewed__notice {
+    margin-bottom: 1rem;
+    font-size: 0.7rem;
+  }
+
+  .most-viewed__track {
+    gap: 0.85rem;
+    padding-bottom: 0.75rem;
+  }
+
   .most-viewed__item {
-    flex-basis: 175px;
-    gap: 0.25rem;
+    flex-basis: 245px;
   }
 
   .most-viewed__rank {
-    flex-basis: 48px;
-    font-size: 2.8rem;
+    flex-basis: 60px;
+    margin-right: -6px;
+    font-size: 75px;
   }
 
-  .most-viewed__controls {
-    gap: 0.35rem;
-  }
-
-  .most-viewed__arrow {
-    width: 2rem;
-    height: 2rem;
-    font-size: 1.6rem;
+  .most-viewed__line-red,
+  .most-viewed__line-blue,
+  .most-viewed__line-yellow {
+    height: 4px;
   }
 }
 
-.most-viewed__poster-button:hover .most-viewed__poster {
-  transform: scale(1.04);
+
+/* ====================================
+   PANTALLAS MUY PEQUEÑAS
+==================================== */
+
+@media (max-width: 380px) {
+  .most-viewed__item {
+    flex-basis: 225px;
+  }
+
+  .most-viewed__rank {
+    flex-basis: 55px;
+    margin-right: -5px;
+    font-size: 65px;
+  }
+
+  .most-viewed__track {
+    gap: 0.75rem;
+  }
+}
+
+
+/* ====================================
+   DISPOSITIVOS TÁCTILES
+==================================== */
+
+@media (hover: none) {
+  .most-viewed__overlay {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+
+    align-items: flex-end;
+    padding-bottom: 14px;
+
+    background: linear-gradient(
+      to top,
+      rgba(5, 7, 13, 0.70),
+      transparent 45%
+    );
+  }
+
+  .most-viewed__item:hover {
+    transform: none;
+  }
+}
+
+
+/* ====================================
+   MOVIMIENTO REDUCIDO
+==================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .most-viewed__track {
+    scroll-behavior: auto;
+  }
+
+  .most-viewed__item,
+  .most-viewed__poster,
+  .most-viewed__overlay {
+    transition: none;
+  }
 }

@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 
 import Button from '../ui/Button.jsx';
@@ -15,10 +16,25 @@ export default function ContentCard({
 }) {
   const [imageError, setImageError] = useState(false);
 
+  if (!item) return null;
+
+  const categoria =
+    CATEGORY_LABELS[item.categoria] ?? item.categoria;
+
+  const tieneCalificacion =
+    item.calificacion !== null &&
+    item.calificacion !== undefined &&
+    item.calificacion !== '';
+
   return (
     <article className="content-card">
-      {/* PÓSTER */}
+
+      {/* ====================================
+          PÓSTER
+      ==================================== */}
+
       <div className="content-card__poster">
+
         {!imageError && item.poster ? (
           <img
             src={item.poster}
@@ -32,39 +48,90 @@ export default function ContentCard({
           </div>
         )}
 
-        {/* BOTÓN VER EN HOVER */}
+        {/* ====================================
+            DECORACIONES CINETIKA
+        ==================================== */}
+
+        <div
+          className="content-card__decoration"
+          aria-hidden="true"
+        >
+          <span className="content-card__line-red" />
+          <span className="content-card__line-blue" />
+          <span className="content-card__line-yellow" />
+        </div>
+
+        {/* ====================================
+            BOTÓN DE DETALLES EN HOVER
+        ==================================== */}
+
         <div className="content-card__overlay">
           <Button
             variant="primary"
             size="sm"
-            icon="play"
             onClick={() => onView?.(item)}
           >
-            Ver
+            Detalles
           </Button>
         </div>
+
       </div>
 
-      {/* INFORMACIÓN */}
+      {/* ====================================
+          INFORMACIÓN INFERIOR
+      ==================================== */}
+
       <div className="content-card__info">
-        <p><strong>Nombre:</strong> {item.nombre}</p>
 
-        <p>
-          <strong>Categoría:</strong>{' '}
-          {CATEGORY_LABELS[item.categoria] ?? item.categoria}
-        </p>
+        <h3 className="content-card__title">
+          {item.nombre}
+        </h3>
 
-        <p><strong>Año:</strong> {item.anio}</p>
+        <div className="content-card__metadata">
 
-        {item.duracion && (
-          <p><strong>Duración:</strong> {item.duracion}</p>
-        )}
+          <span className="content-card__category">
+            {categoria}
+          </span>
 
-        <p>
-          <strong>Calificación:</strong>{' '}
-          {item.calificacion ? `${item.calificacion}/5` : 'Sin calificar'}
-        </p>
+          {item.anio != null && (
+            <span className="content-card__year">
+              {item.anio}
+            </span>
+          )}
+
+          {item.duracion && (
+            <span className="content-card__duration">
+              {item.duracion}
+            </span>
+          )}
+
+        </div>
+
+        <div className="content-card__rating">
+
+          {tieneCalificacion ? (
+            <>
+              <span
+                className="content-card__star"
+                aria-hidden="true"
+              >
+                ★
+              </span>
+
+              <span>
+                {item.calificacion}/5
+              </span>
+            </>
+          ) : (
+            <span className="content-card__unrated">
+              Sin calificar
+            </span>
+          )}
+
+        </div>
+
       </div>
+
     </article>
   );
 }

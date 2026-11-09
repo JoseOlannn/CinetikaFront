@@ -72,23 +72,42 @@ function CatalogoContent({ category }) {
   const [selectedGenre, setSelectedGenre] = useState(null);
   const [featured, setFeatured] = useState([]);
 
-  // Cargar contenido desde la API del backend
+ // Cargar audiovisuales y sus géneros desde la API
   useEffect(() => {
     let activo = true;
 
-    Promise.all([getContents(), getGenres()])
-      .then(([apiContents, apiGenres]) => {
-        if (activo) {
-          setContents(apiContents);
-          setGenres(apiGenres);
+    async function cargarCatalogo() {
+      try {
+        // 1. Obtener audiovisuales de /api/catalogo
+        const apiContents = await getContents();
 
-          const filtrados = filterByCategory(apiContents, category);
-          setFeatured(selectRandomBanner(filtrados, 5));
-        }
-      })
-      .catch((err) => {
-        console.error('Error al cargar catálogo:', err);
-      });
+        // 2. Obtener géneros únicos de esos audiovisuales
+        const apiGenres = await getGenres();
+
+        if (!activo) return;
+
+        // 3. Actualizar estados
+        setContents(apiContents);
+        setGenres(apiGenres);
+
+        // 4. Conservar selección del banner
+        const filtrados = filterByCategory(
+          apiContents,
+          category
+        );
+
+        setFeatured(
+          selectRandomBanner(filtrados, 5)
+        );
+      } catch (err) {
+        console.error(
+          'Error al cargar catálogo:',
+          err
+        );
+      }
+    }
+
+    cargarCatalogo();
 
     return () => {
       activo = false;
