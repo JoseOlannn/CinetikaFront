@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 
 import Button from '../ui/Button.jsx';
 import IconButton from '../ui/IconButton.jsx';
+import VideoPlayer from '../ui/VideoPlayer.jsx';
 
 import '../../styles/FeaturedBanner.css';
 
@@ -285,55 +286,15 @@ export default function FeaturedBanner({
       </section>
 
       {/* ====================================
-          AVISO SIMULADO DE TRÁILER
+          REPRODUCTOR DE VIDEO CINETIKA
       ==================================== */}
 
-      {showTrailerNotice && (
-        <div
-          className="featured-banner__modal-overlay"
-          onMouseDown={(event) => {
-            if (
-              event.target === event.currentTarget
-            ) {
-              setShowTrailerNotice(false);
-            }
-          }}
-        >
-          <div
-            className="featured-banner__modal"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="featured-dialog-title"
-          >
-            <button
-              type="button"
-              className="featured-banner__modal-close"
-              aria-label="Cerrar aviso"
-              onClick={() =>
-                setShowTrailerNotice(false)
-              }
-            >
-              ×
-            </button>
-
-            <h2 id="featured-dialog-title">
-              Ver tráiler
-            </h2>
-
-            <p>
-              El tráiler de{' '}
-              <strong>{item.nombre}</strong>
-              {' '}todavía no está disponible
-              en esta versión de prueba.
-            </p>
-
-            <p className="featured-banner__modal-note">
-              Esta función se conectará
-              posteriormente con el reproductor
-              o la URL del tráiler.
-            </p>
-          </div>
-        </div>
+      {showTrailerNotice && item && (
+        <VideoPlayer
+          titulo={item.nombre}
+          videoUrl={item.videoUrl}
+          onClose={() => setShowTrailerNotice(false)}
+        />
       )}
     </>
   );

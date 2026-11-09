@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router';
 
 import Button from '../components/ui/Button.jsx';
+import VideoPlayer from '../components/ui/VideoPlayer.jsx';
 
 import {
   getContentById,
@@ -225,55 +226,13 @@ function ContentDetailData({ id }) {
         </div>
       </section>
 
-      {/* MODAL REPRODUCTOR DE VIDEO */}
-      {playingVideo && embedUrl && (
-        <div
-          className="content-detail__player-overlay"
-          onClick={() => setPlayingVideo(false)}
-        >
-          <div
-            className="content-detail__player-modal"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="content-detail__player-header">
-              <h3>Reproduciendo: {content.nombre}</h3>
-              <div className="content-detail__player-actions">
-                <a
-                  href={content.videoUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="content-detail__player-link"
-                >
-                  Abrir enlace externo ↗
-                </a>
-                <button
-                  type="button"
-                  className="content-detail__player-close"
-                  onClick={() => setPlayingVideo(false)}
-                >
-                  ✕ Cerrar
-                </button>
-              </div>
-            </div>
-
-            <div className="content-detail__player-frame-wrapper">
-              {isDirectVideo ? (
-                <video
-                  src={content.videoUrl}
-                  controls
-                  autoPlay
-                />
-              ) : (
-                <iframe
-                  src={embedUrl}
-                  title={`Reproductor de ${content.nombre}`}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-                />
-              )}
-            </div>
-          </div>
-        </div>
+      {/* MODAL REPRODUCTOR DE VIDEO CINETIKA */}
+      {playingVideo && (
+        <VideoPlayer
+          titulo={content.nombre}
+          videoUrl={content.videoUrl}
+          onClose={() => setPlayingVideo(false)}
+        />
       )}
     </main>
   );
