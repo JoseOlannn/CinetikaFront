@@ -1,4 +1,4 @@
-const modulos = import.meta.glob("../../assets/Portadas/*.{jpg,jpeg,png,webp}", {
+const modulos = import.meta.glob("../../assets/portadas/*.{jpg,jpeg,png,webp}", {
   eager: true,
   import: "default",
 });
