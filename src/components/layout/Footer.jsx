@@ -1,4 +1,5 @@
 import '../../styles/Footer.css';
+import Button from '../ui/Button.jsx';
 
 import facebook from "../../assets/redes/facebook.jpg";
 import instagram from "../../assets/redes/instagram.jpg";
@@ -16,7 +17,12 @@ function Footer() {
                     <h2>¿Te gustaría empezar a disfrutar de las mejores películas retro?
                         Suscríbete a Cinetika y siente la nostalgia.
                     </h2>
-                    <button className="btn-comenzar">Comenzar</button>
+                    <Button
+                    variant="primary"
+                    size="md"
+                    >
+                    Comenzar
+                    </Button>
                 </div>
 
                 <div className="diseno-links">

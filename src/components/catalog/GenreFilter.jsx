@@ -6,9 +6,6 @@ export default function GenreFilter({
   selectedGenre = null,
   onGenreChange,
 }) {
-  const activeGenre = genres.find(
-    (genre) => genre.id === selectedGenre
-  );
 
   return (
     <section className="genre-filter">
@@ -22,8 +19,8 @@ export default function GenreFilter({
           onChange={(event) => {
             const value = event.target.value;
 
-            onGenreChange(
-              value === '' ? null : Number(value)
+            onGenreChange?.(
+              value === '' ? null : value
             );
           }}
         >
@@ -51,17 +48,17 @@ export default function GenreFilter({
         </span>
       </div>
 
-      {/* DESCRIPCIÓN DEL GÉNERO */}
-      <div
-        className="genre-filter__description"
-        aria-live="polite"
-      >
-        <p>
-          {activeGenre
-            ? activeGenre.descripcion
-            : 'Selecciona un género para explorar los audiovisuales disponibles.'}
-        </p>
-      </div>
+      {/* MENSAJE SOLO CUANDO ESTÁN TODOS LOS GÉNEROS */}
+      {!selectedGenre && (
+        <div
+          className="genre-filter__description"
+          aria-live="polite"
+        >
+          <p>
+            Selecciona un género para explorar los audiovisuales disponibles.
+          </p>
+        </div>
+      )}
     </section>
   );
 }

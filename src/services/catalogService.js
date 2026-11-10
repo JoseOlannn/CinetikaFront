@@ -20,6 +20,33 @@ function normalizarItem(item) {
   };
 }
 
+function extraerGeneros(contents) {
+  const nombres = new Map();
+
+  for (const item of contents) {
+    for (const genero of item.generos || []) {
+      if (typeof genero !== 'string') continue;
+
+      const nombre = genero.trim();
+      if (!nombre) continue;
+
+      const clave = nombre.toLocaleLowerCase('es');
+
+      if (!nombres.has(clave)) {
+        nombres.set(clave, nombre);
+      }
+    }
+  }
+
+  return [...nombres.values()]
+    .sort((a, b) => a.localeCompare(b, 'es'))
+    .map((nombre) => ({
+      id: nombre,
+      nombre,
+      descripcion: `Explora los audiovisuales del género ${nombre}.`,
+    }));
+}
+
 // ====================================
 // OBTENER CATÁLOGO
 // ====================================
@@ -27,8 +54,10 @@ function normalizarItem(item) {
 export async function getContents() {
   try {
     const data = await api.get('/catalogo');
-    if (Array.isArray(data) && data.length > 0) {
+    if (Array.isArray(data)) {
       cachedContents = data.map(normalizarItem);
+      cachedGenres = extraerGeneros(cachedContents);
+
       return cachedContents;
     }
   } catch (error) {
@@ -57,25 +86,27 @@ export function filterByCategory(contents, category) {
 // FILTRAR POR GÉNERO
 // ====================================
 
-export function filterByGenre(contents, genreIdOrName) {
-  if (genreIdOrName === null || genreIdOrName === undefined || genreIdOrName === '') {
+export function filterByGenre(contents, selectedGenre) {
+  if (
+    selectedGenre === null ||
+    selectedGenre === undefined ||
+    selectedGenre === ''
+  ) {
     return contents;
   }
 
-  // Si nos pasan un ID numérico, buscar el nombre correspondiente en genres
-  const genreObj = cachedGenres.find((g) => g.id === genreIdOrName || g.nombre === genreIdOrName);
-  const targetName = genreObj ? genreObj.nombre.toLowerCase() : String(genreIdOrName).toLowerCase();
+  const targetName = String(selectedGenre)
+    .trim()
+    .toLocaleLowerCase('es');
 
-  return contents.filter((item) => {
-    if (!Array.isArray(item.generos)) return false;
-
-    return item.generos.some((g) => {
-      if (typeof g === 'number') {
-        return g === genreIdOrName || (genreObj && g === genreObj.id);
-      }
-      return String(g).toLowerCase() === targetName || (genreObj && String(g).toLowerCase() === genreObj.nombre.toLowerCase());
-    });
-  });
+  return contents.filter((item) =>
+    Array.isArray(item.generos) &&
+    item.generos.some(
+      (genero) =>
+        typeof genero === 'string' &&
+        genero.trim().toLocaleLowerCase('es') === targetName
+    )
+  );
 }
 
 // ====================================
@@ -83,24 +114,23 @@ export function filterByGenre(contents, genreIdOrName) {
 // ====================================
 
 export function getAvailableGenres(contents, genres) {
-  // Recopilar todos los géneros presentes en los contenidos
   const presentes = new Set();
 
   for (const item of contents) {
-    for (const g of item.generos || []) {
-      if (typeof g === 'number') {
-        presentes.add(g);
-      } else if (typeof g === 'string') {
-        // Mapear nombre de género al id si existe
-        const match = genres.find((gen) => gen.nombre.toLowerCase() === g.toLowerCase());
-        if (match) {
-          presentes.add(match.id);
-        }
+    for (const genero of item.generos || []) {
+      if (typeof genero === 'string') {
+        presentes.add(
+          genero.trim().toLocaleLowerCase('es')
+        );
       }
     }
   }
 
-  return genres.filter((genre) => presentes.has(genre.id));
+  return genres.filter((genre) =>
+    presentes.has(
+      genre.nombre.trim().toLocaleLowerCase('es')
+    )
+  );
 }
 
 // ====================================

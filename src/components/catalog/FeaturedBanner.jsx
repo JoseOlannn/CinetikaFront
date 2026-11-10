@@ -219,10 +219,9 @@ export default function FeaturedBanner({
               variant="primary"
               size="md"
               type="button"
-              icon="play"
               onClick={() => onView?.(item)}
             >
-              Ver
+              Detalles
             </Button>
 
             <Button

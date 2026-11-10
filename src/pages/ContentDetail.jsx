@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router';
 
@@ -17,34 +18,6 @@ const CATEGORY_LABELS = {
   cortometraje: 'Cortometraje',
 };
 
-const { genres } = getCatalogSnapshot();
-
-/**
- * Convierte enlaces comunes (YouTube, Vimeo, etc.) a URLs reproducibles en un iframe.
- */
-function getEmbedUrl(url) {
-  if (!url) return null;
-  const trimmed = url.trim();
-
-  // YouTube
-  const ytMatch = trimmed.match(
-    /(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/
-  );
-  if (ytMatch && ytMatch[1]) {
-    const origin = typeof window !== 'undefined' ? window.location.origin : '';
-    const originParam = origin ? `&origin=${encodeURIComponent(origin)}` : '';
-    return `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1&rel=0${originParam}`;
-  }
-
-  // Vimeo
-  const vimeoMatch = trimmed.match(/vimeo\.com\/(?:video\/)?(\d+)/);
-  if (vimeoMatch && vimeoMatch[1]) {
-    return `https://player.vimeo.com/video/${vimeoMatch[1]}?autoplay=1`;
-  }
-
-  return trimmed;
-}
-
 // ====================================
 // PÁGINA DE DETALLES
 // ====================================
@@ -56,28 +29,34 @@ export default function ContentDetail() {
 }
 
 function ContentDetailData({ id }) {
+  const navigate = useNavigate();
+
   const [content, setContent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState('');
   const [playingVideo, setPlayingVideo] = useState(false);
-  const navigate = useNavigate();
+  const [posterError, setPosterError] = useState(false);
+  const [bannerError, setBannerError] = useState(false);
 
-  // Buscar el audiovisual utilizando el ID de la URL
+  // ====================================
+  // CARGAR AUDIOVISUAL DESDE LA API
+  // ====================================
+
   useEffect(() => {
     let active = true;
 
     getContentById(id)
       .then((result) => {
-        if (active) {
-          setContent(result);
-          setLoading(false);
-        }
+        if (!active) return;
+
+        setContent(result);
+        setLoading(false);
       })
       .catch(() => {
-        if (active) {
-          setMessage('No se pudo cargar el audiovisual.');
-          setLoading(false);
-        }
+        if (!active) return;
+
+        setMessage('No se pudo cargar el audiovisual.');
+        setLoading(false);
       });
 
     return () => {
@@ -85,19 +64,32 @@ function ContentDetailData({ id }) {
     };
   }, [id]);
 
+  // ====================================
+  // ABRIR REPRODUCTOR
+  // ====================================
+
   function handlePlay() {
     if (!content?.videoUrl) {
-      setMessage('Este contenido aún no tiene un video o tráiler asignado.');
+      setMessage(
+        'Este contenido aún no tiene un video o tráiler asignado.'
+      );
       return;
     }
+
     setMessage('');
     setPlayingVideo(true);
   }
 
+  // ====================================
+  // ESTADOS DE CARGA
+  // ====================================
+
   if (loading) {
     return (
       <main className="content-detail">
-        <p>Cargando audiovisual...</p>
+        <div className="content-detail__status">
+          <p>Cargando audiovisual...</p>
+        </div>
       </main>
     );
   }
@@ -105,128 +97,232 @@ function ContentDetailData({ id }) {
   if (!content) {
     return (
       <main className="content-detail">
-        <h1>Audiovisual no encontrado</h1>
+        <div className="content-detail__status">
+          <h1>Audiovisual no encontrado</h1>
 
-        <p>
-          {message || 'No existe contenido con ese ID.'}
-        </p>
+          <p>
+            {message || 'No existe contenido con ese ID.'}
+          </p>
 
-        <Link to="/catalogo">
-          Volver al catálogo
-        </Link>
+          <Link to="/catalogo">
+            Volver al catálogo
+          </Link>
+        </div>
       </main>
     );
   }
 
-  // Traducir IDs a nombres de géneros
-  const genreNames = (content.generos ?? []).map((genreId) => {
-    if (typeof genreId === 'string') {
-      return genreId;
-    }
-    const genre = genres.find((item) => item.id === genreId);
-    return genre?.nombre ?? `Género ${genreId}`;
-  });
+  // ====================================
+  // DATOS DEL AUDIOVISUAL
+  // ====================================
 
-  const embedUrl = getEmbedUrl(content.videoUrl);
-  const isDirectVideo = content.videoUrl && /\.(mp4|webm|ogg)$/i.test(content.videoUrl);
+  const category =
+    CATEGORY_LABELS[content.categoria] ??
+    content.categoria ??
+    'Audiovisual';
+
+  // La API normalmente entrega nombres de géneros.
+  // Se conserva compatibilidad con IDs anteriores.
+  const { genres } = getCatalogSnapshot();
+
+  const genreNames = (content.generos ?? [])
+    .map((genreValue) => {
+      if (typeof genreValue === 'string') {
+        return genreValue;
+      }
+
+      const genre = genres.find(
+        (item) => item.id === genreValue
+      );
+
+      return genre?.nombre ?? `Género ${genreValue}`;
+    })
+    .filter(Boolean);
+
+  const hasRating =
+    content.calificacion !== null &&
+    content.calificacion !== undefined &&
+    content.calificacion !== '';
+
+  const hasBanner = Boolean(content.banner) && !bannerError;
+  const hasPoster = Boolean(content.poster) && !posterError;
 
   return (
     <main className="content-detail">
-      <section className="content-detail__information">
-        {/* IMÁGENES */}
-        <div className="content-detail__images">
-          {content.banner && (
+
+      {/* ====================================
+          HERO CINEMATOGRÁFICO
+      ==================================== */}
+
+      <section
+        className="content-detail__hero"
+        aria-labelledby="content-detail-title"
+      >
+
+        {/* BANNER DE FONDO */}
+        <div
+          className="content-detail__background"
+          aria-hidden="true"
+        >
+          {hasBanner && (
             <img
               src={content.banner}
               alt=""
-              className="content-detail__banner"
-              onError={(event) => {
-                event.currentTarget.style.display = 'none';
-              }}
-            />
-          )}
-
-          {content.poster && (
-            <img
-              src={content.poster}
-              alt={`Póster de ${content.nombre}`}
-              className="content-detail__poster"
-              onError={(event) => {
-                event.currentTarget.style.display = 'none';
-              }}
+              className="content-detail__background-image"
+              onError={() => setBannerError(true)}
             />
           )}
         </div>
 
-        {/* DATOS */}
-        <div className="content-detail__data">
-          <p>
-            <strong>Categoría:</strong>{' '}
-            {CATEGORY_LABELS[content.categoria] ?? content.categoria}
-          </p>
+        {/* CAPAS OSCURAS DEL BANNER */}
+        <div
+          className="content-detail__background-overlay"
+          aria-hidden="true"
+        />
 
-          <h2>{content.nombre}</h2>
+        {/* CONTENIDO DEL HERO */}
+        <div className="content-detail__information">
 
-          <p>
-            <strong>Año:</strong> {content.anio}
-          </p>
+          {/* ====================================
+              PÓSTER VERTICAL
+          ==================================== */}
 
-          {content.duracion && (
-            <p>
-              <strong>Duración:</strong> {content.duracion}
-            </p>
-          )}
+          <div className="content-detail__images">
+            <div className="content-detail__poster-frame">
 
-          <p>
-            <strong>Calificación:</strong>{' '}
-            {content.calificacion ? `${content.calificacion}/5` : 'Sin calificar'}
-          </p>
+              {hasPoster ? (
+                <img
+                  src={content.poster}
+                  alt={`Póster de ${content.nombre}`}
+                  className="content-detail__poster"
+                  onError={() => setPosterError(true)}
+                />
+              ) : (
+                <div className="content-detail__poster-fallback">
+                  Sin póster disponible
+                </div>
+              )}
 
-          <p>
-            <strong>Géneros:</strong>{' '}
-            {genreNames.join(', ') || 'Sin clasificar'}
-          </p>
+              {/* Detalles de color Cinetika */}
+              <span
+                className="content-detail__poster-line-red"
+                aria-hidden="true"
+              />
 
-          <p>
-            <strong>Sinopsis:</strong> {content.sinopsis}
-          </p>
+              <span
+                className="content-detail__poster-line-blue"
+                aria-hidden="true"
+              />
 
-          {/* ACCIONES */}
-          <div className="content-detail__actions">
-            <Button
-              variant="primary"
-              icon="play"
-              onClick={handlePlay}
-            >
-              Ver
-            </Button>
+              <span
+                className="content-detail__poster-line-yellow"
+                aria-hidden="true"
+              />
 
-            <Button
-              variant="outline"
-              icon="eye"
-              onClick={handlePlay}
-            >
-              Ver tráiler
-            </Button>
-
-            <Button
-              variant="secondary"
-              size="md"
-              onClick={() => navigate(-1)}
-            >
-              Volver
-            </Button>
+            </div>
           </div>
 
-          {message && (
-            <p role="status" className="content-detail__message">
-              {message}
-            </p>
-          )}
+          {/* ====================================
+              INFORMACIÓN Y ACCIONES
+          ==================================== */}
+
+          <div className="content-detail__data">
+
+            {/* CALIFICACIÓN Y METADATOS */}
+            <div className="content-detail__metadata">
+
+              {hasRating && (
+                <span className="content-detail__rating">
+                  <span aria-hidden="true">★</span>
+                  {content.calificacion}/5
+                </span>
+              )}
+
+              {content.anio != null && (
+                <span>{content.anio}</span>
+              )}
+
+              <span>{category}</span>
+
+              {content.duracion && (
+                <span>{content.duracion}</span>
+              )}
+
+            </div>
+
+            {/* TÍTULO */}
+            <h1
+              id="content-detail-title"
+              className="content-detail__title"
+            >
+              {content.nombre}
+            </h1>
+
+            {/* SINOPSIS */}
+            {content.sinopsis && (
+              <p className="content-detail__synopsis">
+                {content.sinopsis}
+              </p>
+            )}
+
+            {/* GÉNEROS */}
+            {genreNames.length > 0 && (
+              <p className="content-detail__genres">
+                <strong>Géneros: </strong>
+                {genreNames.join(' · ')}
+              </p>
+            )}
+
+            {/* ====================================
+                ACCIONES ORIGINALES
+            ==================================== */}
+
+            <div className="content-detail__actions">
+
+              <Button
+                variant="primary"
+                icon="play"
+                onClick={handlePlay}
+              >
+                Ver
+              </Button>
+
+              <Button
+                variant="outline"
+                icon="eye"
+                onClick={handlePlay}
+              >
+                Ver tráiler
+              </Button>
+
+              <Button
+                variant="secondary"
+                size="md"
+                onClick={() => navigate(-1)}
+              >
+                Volver
+              </Button>
+
+            </div>
+
+            {message && (
+              <p
+                role="status"
+                className="content-detail__message"
+              >
+                {message}
+              </p>
+            )}
+
+          </div>
         </div>
+
       </section>
 
-      {/* MODAL REPRODUCTOR DE VIDEO CINETIKA */}
+      {/* ====================================
+          REPRODUCTOR EXISTENTE
+      ==================================== */}
+
       {playingVideo && (
         <VideoPlayer
           titulo={content.nombre}
@@ -234,6 +330,7 @@ function ContentDetailData({ id }) {
           onClose={() => setPlayingVideo(false)}
         />
       )}
+
     </main>
   );
 }
